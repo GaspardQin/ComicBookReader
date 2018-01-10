@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="comic_book_reader_contract.hpp">
+    <ClInclude Include="..\include\comic_book_reader_contract.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

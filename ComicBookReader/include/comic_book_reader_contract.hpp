@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
+#include <opencv2\opencv.hpp>
 class ArchiveFormatInterface {
 	//the interface for different libararies of archive files
 };
