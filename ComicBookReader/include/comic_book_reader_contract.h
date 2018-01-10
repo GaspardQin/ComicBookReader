@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <opencv2\opencv.hpp>
+#include <vector>
 class ArchiveFormatInterface {
 	//the interface for different libararies of archive files
 
@@ -22,6 +23,9 @@ public:
 	bool virtual loadOneImage(int num, cv::Mat &a_image) = 0;
 
 	// Use OpenCV function
+	/////////////////////
+	// ATTENTION! Load image in 3 channels in RGB order but not BGR by default!
+	////////////////////
 	//load one image from archive_loaded
 
 
