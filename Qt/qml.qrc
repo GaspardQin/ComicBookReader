@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>CustomButton.qml</file>
+        <file>CustomSeparator.qml</file>
+        <file>CustomSlider.qml</file>
+    </qresource>
+</RCC>

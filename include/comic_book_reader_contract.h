@@ -23,9 +23,6 @@ public:
 	bool virtual loadOneImage(int num, cv::Mat &a_image) = 0;
 
 	// Use OpenCV function
-	/////////////////////
-	// ATTENTION! Load image in 3 channels in RGB order but not BGR by default!
-	////////////////////
 	//load one image from archive_loaded
 
 
@@ -39,27 +36,27 @@ private:
 class ImageProcessInterface
 {
 public:
-	ImageProcessInterface();
-	~ImageProcessInterface();
+	//ImageProcessInterface();
+	//~ImageProcessInterface();
 
 
-	bool virtual AutoAdjustImage(cv::Mat& input_image, cv::Mat& output_image, int image_type_flag, int height, int width) = 0;
+	bool virtual autoAdjustImage(cv::Mat& input_image, cv::Mat& output_image, int image_type_flag) = 0;
 	// image_type_flags = 0 for image whose the type is text
 	// image_type_flags = 1 for image whose the type is graphics
 	// output_image's height in pixels
 	// output_image's width in pixels
 
-	bool virtual QuickPreview(cv::Mat& input_image, cv::Mat& output_image, int image_type_flag, int height, int width) = 0;
+	bool virtual quickPreview(cv::Mat& input_image, cv::Mat& output_image) = 0;
 	// used for quickly flipping of pages
 	// show the image with low resolution quickly
+	// need to be resized
 
-	bool virtual AutoAdjustForTwoImages(cv::Mat& input_image1, cv::Mat& input_image2, cv::Mat& output_image, int image_type_flag1, int image_type_flag2, int height, int width) = 0;
+	bool virtual autoAdjustForTwoImages(cv::Mat& input_image1, cv::Mat& input_image2, cv::Mat& output_image, int image_type_flag1, int image_type_flag2, int height, int width) = 0;
 	//used for showing 2 images in the same screen
 	// output_image is a whole image which contains 2 parts
 
-	bool virtual getImage(int num, cv::Mat& output_image) = 0;
+	bool virtual getImage(int num, int image_type_flag, cv::Mat& output_image) = 0;
 	//first step: check if the page exists in cache, if not, processing the images
 
-private:
-	std::map<int, cv::Mat> image_processed_cache;
+
 };
