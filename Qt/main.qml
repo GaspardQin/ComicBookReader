@@ -33,16 +33,20 @@ Window {
         bottomPadding: 0
         leftPadding: 3
         topPadding: 0
-        from : 0
-        value: 0
-        to : 1
-
+        from : 1
+        value: 1
+        to : showImage.getTotalPageNum()
+        snapMode: Slider.SnapOnRelease
+        stepSize: 1
         Connections {
             target: showImage
+
             onPageNumChanged: {
                 slider.value = showImage.pageNum
-                slider.to = showImage.getTotalPageNum()
             }
+        }
+        onValueChanged: {
+            showImage.pageNum = slider.value;
         }
 
 
@@ -114,6 +118,28 @@ Window {
             CustomButton {
                 id: buttonScaling
                 text: qsTr("Scaling")
+                onClicked: scrollSliderPopup.open()
+                Popup {
+                    id: scrollSliderPopup
+
+                    width: 20
+                    height: 100
+                    x: parent.width/2 - width/2
+                    y: -height-5
+                    focus: true
+                    padding: 0
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                    opacity: 0.9
+                    CustomSliderVertical{
+                        id: scrollSlider
+                        x: parent.width/2 - width/2
+                        y: parent.height/2 - height/2
+                        height: 100
+                        width: 20
+                        opacity: 1
+                    }
+                }
+
             }
             CustomSeparator{}
             CustomButton {

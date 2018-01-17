@@ -1,9 +1,8 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
-
+import QtQuick.Controls.Styles 1.4
 Slider {
     id: sliderid
-    value: 0.5
 
     background: Rectangle {
         x: sliderid.leftPadding
@@ -16,10 +15,11 @@ Slider {
         color: "#bdbebf"
 
         Rectangle {
+            color : "#21be2b"
+            radius: 2
             width: sliderid.visualPosition * parent.width
             height: parent.height
-            color: "#21be2b"
-            radius: 2
+
         }
     }
 
@@ -32,4 +32,11 @@ Slider {
         color: sliderid.pressed ? "#f0f0f0" : "#f6f6f6"
         border.color: "#bdbebf"
     }
+    ToolTip {
+        opacity: 0.8
+        parent: sliderid.handle
+        visible: sliderid.pressed
+        text: sliderid.value
+    }
+
 }

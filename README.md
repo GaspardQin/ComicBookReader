@@ -1,7 +1,14 @@
 # ComicBookReader
 A reader to support the different formats used for comics, just like some current software
 
+To be submitted:
 
+ - test examples
+ - UML
+ - program executive and code
+ - readme for program (3d parts illustration included)
+
+finally, there exists a presentation of 5 mins (explication, illustration(run the program))
 
 
 
