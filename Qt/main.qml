@@ -21,12 +21,36 @@ Window {
         Layout.fillHeight: true
 
         drag.target: showImage
+        enabled: true
+        property double factor: 2.0
 
-        //DropArea {
-       //     anchors.fill: parent
-            //onEntered: drag.source.caught = true;
-           // onExited: drag.source.caught = false;
-        //}
+        property double oldImgX: 0.0
+        property double oldImgY: 0.0
+        hoverEnabled: true
+        onWheel:{
+            oldImgX = showImage.x
+            oldImgY = showImage.y
+            if(wheel.modifiers & Qt.ControlModifier){
+                if( wheel.angleDelta.y > 0 )  // zoom in
+                {
+                    showImage.width *= factor
+                    showImage.height *= factor
+                    showImage.x = oldImgX - (factor - 1)*(mouseX - oldImgX)
+                    showImage.y = oldImgY - (factor -1)*(mouseY - oldImgY)
+                    scrollSlider.value *= factor
+                }
+                else if( wheel.angleDelta.y < 0 ){                        // zoom out
+                    showImage.width /= factor
+                    showImage.height /= factor
+                    showImage.x = oldImgX + (1 - 1/factor)*(mouseX - oldImgX)
+                    showImage.y = oldImgY + (1 - 1/factor)*(mouseY - oldImgY)
+                    scrollSlider.value /= factor
+                }
+
+            }
+
+
+        }
 
 
         Image {
@@ -37,20 +61,34 @@ Window {
             //anchors.verticalCenter: parent.verticalCenter
             property int pageNum: 1
             property int showMode: 0 //0 for img, 1 for text
+
             source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString()
             fillMode: Image.PreserveAspectFit
             mipmap: true
 
             Drag.active: mouseArea.drag.active
+
             states: State {
-                when: mouseArea.drag.active
+                    when: mouseArea.drag.active
 
-                AnchorChanges { target: showImage; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
+                    AnchorChanges { target: showImage; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
             }
-
             onPageNumChanged: {
                 anchors.horizontalCenter = parent.horizontalCenter
                 anchors.verticalCenter = parent.verticalCenter
+            }
+            Connections {
+                target: scrollSlider
+                property double oldImgX
+                property double oldImgY
+                onMoved:{
+                    oldImgX = showImage.x
+                    oldImgY = showImage.y
+                    showImage.width = showImage.parent.width * scrollSlider.value
+                    showImage.height = showImage.parent.height * scrollSlider.value
+                    showImage.x = showImage.parent.width/2.0 - scrollSlider.value*(showImage.parent.width/2.0 - oldImgX)
+                    showImage.y = showImage.parent.height/2.0 - scrollSlider.value*(showImage.parent.height/2.0 - oldImgY)
+                }
             }
 
         }
@@ -162,6 +200,13 @@ Window {
                     padding: 0
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                     opacity: 0.9
+                    onOpened: {
+                        mouseArea.enabled = false
+                    }
+                    onClosed: {
+                        mouseArea.enabled = true
+                    }
+
                     CustomSliderVertical{
                         id: scrollSlider
                         x: parent.width/2 - width/2
@@ -169,6 +214,13 @@ Window {
                         height: 100
                         width: 20
                         opacity: 1
+                        from:0.25
+                        to:5.0
+                        value:1.0
+                        stepSize: 0.05
+                        snapMode: Slider.SnapAlways
+
+
                     }
                 }
 

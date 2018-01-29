@@ -42,7 +42,7 @@ Slider {
 
         parent: slideridvertical.handle
         visible: slideridvertical.pressed
-        text: slideridvertical.from - slideridvertical.value
+        text: slideridvertical.value.toFixed(2)
     }
 
 }
