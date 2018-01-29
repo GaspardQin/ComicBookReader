@@ -15,7 +15,16 @@ void ShowImage::paint(QPainter *painter){
     std::string image_path = path_debug;
     image_path += std::to_string(page_num);
     image_path += ".png";
-    painter->drawImage(contentsBoundingRect(), QImage( QString::fromStdString(image_path)));
+    QImage image =  QImage( QString::fromStdString(image_path));
+    QSize show_size(image.width(), image.height());
+
+    //painter-> save (); // save
+
+    painter->setRenderHints(QPainter::Antialiasing|QPainter::SmoothPixmapTransform,true);
+    show_size.scale(width(),height(), Qt::KeepAspectRatio);
+    painter->drawImage(QRect(width()/2-show_size.width()/2, height()/2-show_size.height()/2, show_size.width(), show_size.height()),image);
+
+    //painter-> restore (); // restore
     //QImage *image = new QImage("C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/graphe.png");
     //painter->drawImage(contentsBoundingRect(), *image);
     //Qimage cannot load jpg
