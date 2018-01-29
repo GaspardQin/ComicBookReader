@@ -1,7 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "showimage.h"
-
+//#include "showimage.h"
+#include "imgprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,12 +12,14 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    qmlRegisterType<ShowImage>("ComicBookReader.ShowImage", 1, 0, "ShowImage");
+    //qmlRegisterType<ShowImage>("ComicBookReader.ShowImage", 1, 0, "ShowImage");
+    ImgProvider* img_provider_ptr = new ImgProvider;
+    engine.addImageProvider(QString("ImageProvider"), img_provider_ptr);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
 
     if (engine.rootObjects().isEmpty())
         return -1;
-
+    img_provider_ptr->setRootObject(engine.rootObjects().first());
     return app.exec();
 }

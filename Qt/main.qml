@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import ComicBookReader.ShowImage 1.0
 
 Window {
     id: window
@@ -11,9 +10,8 @@ Window {
     height: 480
     title: qsTr("ComicBookReader")
 
-    ShowImage {
-        id: showImage
-        fillColor: "#66b6ff"
+    MouseArea {
+        id: mouseArea
         width: parent.width
 
         anchors.top:parent.top
@@ -22,12 +20,46 @@ Window {
         anchors.right: parent.right
         Layout.fillHeight: true
 
+        drag.target: showImage
+
+        //DropArea {
+       //     anchors.fill: parent
+            //onEntered: drag.source.caught = true;
+           // onExited: drag.source.caught = false;
+        //}
+
+
+        Image {
+            id: showImage
+            width: parent.width
+            height: parent.height
+            //anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.verticalCenter: parent.verticalCenter
+            property int pageNum: 1
+            property int showMode: 0 //0 for img, 1 for text
+            source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString()
+            fillMode: Image.PreserveAspectFit
+            mipmap: true
+
+            Drag.active: mouseArea.drag.active
+            states: State {
+                when: mouseArea.drag.active
+
+                AnchorChanges { target: showImage; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
+            }
+
+            onPageNumChanged: {
+                anchors.horizontalCenter = parent.horizontalCenter
+                anchors.verticalCenter = parent.verticalCenter
+            }
+
+        }
     }
     CustomSlider {
         id:slider
         anchors.bottom:  bottomBar.top
         width:parent.width
-
+        objectName: "SlideBar"
         anchors.bottomMargin: 0
         rightPadding: 3
         bottomPadding: 0
@@ -35,7 +67,7 @@ Window {
         topPadding: 0
         from : 1
         value: 1
-        to : showImage.getTotalPageNum()
+        to :1
         snapMode: Slider.SnapOnRelease
         stepSize: 1
         Connections {
