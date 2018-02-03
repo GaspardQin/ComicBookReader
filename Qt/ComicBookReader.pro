@@ -24,7 +24,8 @@ INCLUDEPATH += ..\include\
 
 SOURCES += main.cpp \
     showimage.cpp \
-    imgprovider.cpp
+    imgprovider.cpp \
+    preloadworker.cpp
 
 RESOURCES += qml.qrc
 
@@ -41,6 +42,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     showimage.h \
-    imgprovider.h
+    imgprovider.h \
+    preloadworker.h \
+    cache.h
 
 DISTFILES +=

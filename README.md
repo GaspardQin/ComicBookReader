@@ -1,4 +1,4 @@
-# ComicBookReader #
+# ComicBookReader 
 A reader to support the different formats used for comics, just like some current software
 
 To be submitted:
@@ -12,7 +12,7 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
 
 
 
-## LOG ##
+## LOG
 
 - Use QML to draw the GUI, especially using the Qt Quick Control, having these components
 
@@ -28,10 +28,13 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
    reference is here https://stackoverflow.com/questions/20691414/qt-qml-send-qimage-from-c-to-qml-and-display-the-qimage-on-gui
 
 - Add free drag and free scaling(ctrl + wheel) feature. The center of scaling is always the mouse position.
+- Add multi-processing preload feature, a worker in background will always preload images, and a thread-safe cache is used to caching the images.
 
-## TO DO (in priori order)## ​
-- make the picture load asynchronouslly.
-- add pre-load feature.
+## TO DO (in priori order)
+- ~~make the picture load asynchronouslly.~~ Done
+- ~~add pre-load feature.~~
+  - ~~change cache to the thread-safe implementation, use QCahe and QReadWriteLock~~
+  - ~~make preload_worker always run in background until filling all the cache~~
 - change scaling bar to 3 buttons: zoom in, zoom out, auto-fit.
 - link the process part to qt, finish the button T/I/R (can use the popup view: Text, Image, Raw).
 - improve the image process part, including two parts: picture, and test.

@@ -63,6 +63,7 @@ Window {
             property int showMode: 0 //0 for img, 1 for text
 
             source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString()
+            cache: false
             fillMode: Image.PreserveAspectFit
             mipmap: true
 
@@ -74,6 +75,12 @@ Window {
                     AnchorChanges { target: showImage; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
             }
             onPageNumChanged: {
+                if(pageNum > slider.to){
+                    pageNum = slider.to;
+                }else if(pageNum < 1){
+                    pageNum = 1;
+                }
+
                 anchors.horizontalCenter = parent.horizontalCenter
                 anchors.verticalCenter = parent.verticalCenter
             }
