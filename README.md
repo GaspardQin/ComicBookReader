@@ -38,6 +38,6 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
 - ~~change scaling bar to 3 buttons: zoom in, zoom out, auto-fit.~~ Done
 - link the process part to qt, finish the button T/I/R (can use the popup view: Text, Image, Raw).
 - improve the image process part, including two parts: picture, and test.
-- finish the button "Two".
+- ~~finish the button "Two".~~ Done
 - link the uncompress part.
 - finish the button "Open".(actually no need to use the popup view).

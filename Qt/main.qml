@@ -13,14 +13,13 @@ Window {
     MouseArea {
         id: mouseArea
         width: parent.width
-
         anchors.top:parent.top
         anchors.bottom: slider.top
         anchors.left: parent.left
         anchors.right: parent.right
         Layout.fillHeight: true
 
-        drag.target: showImage
+        drag.target: showWindow
         enabled: true
         property double factor: 1.25
 
@@ -28,22 +27,22 @@ Window {
         property double oldImgY: 0.0
         hoverEnabled: true
         onWheel:{
-            oldImgX = showImage.x
-            oldImgY = showImage.y
+            oldImgX = showWindow.x
+            oldImgY = showWindow.y
             if(wheel.modifiers & Qt.ControlModifier){
                 if( wheel.angleDelta.y > 0 )  // zoom in
                 {
-                    showImage.width *= factor
-                    showImage.height *= factor
-                    showImage.x = oldImgX - (factor - 1)*(mouseX - oldImgX)
-                    showImage.y = oldImgY - (factor -1)*(mouseY - oldImgY)
+                    showWindow.width *= factor
+                    showWindow.height *= factor
+                    showWindow.x = oldImgX - (factor - 1)*(mouseX - oldImgX)
+                    showWindow.y = oldImgY - (factor -1)*(mouseY - oldImgY)
 
                 }
                 else if( wheel.angleDelta.y < 0 ){                        // zoom out
-                    showImage.width /= factor
-                    showImage.height /= factor
-                    showImage.x = oldImgX + (1 - 1/factor)*(mouseX - oldImgX)
-                    showImage.y = oldImgY + (1 - 1/factor)*(mouseY - oldImgY)
+                    showWindow.width /= factor
+                    showWindow.height /= factor
+                    showWindow.x = oldImgX + (1 - 1/factor)*(mouseX - oldImgX)
+                    showWindow.y = oldImgY + (1 - 1/factor)*(mouseY - oldImgY)
 
                 }
 
@@ -51,76 +50,138 @@ Window {
 
 
         }
+        Item{
 
-
-        Image {
-            id: showImage
+            id: showWindow
             width: parent.width
             height: parent.height
-            //anchors.horizontalCenter: parent.horizontalCenter
-            //anchors.verticalCenter: parent.verticalCenter
-            property int pageNum: 1
-            property int showMode: 0 //0 for img, 1 for text
+            anchors.horizontalCenter : parent.horizontalCenter
+            anchors.verticalCenter : parent.verticalCenter
+            Image {
+                id: showImage
+                width: (showImage2.status == Image.Error||showImage2.status == Image.Null || showImage2.opacity == 0.0) ? parent.width : parent.width*0.48
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.rightMargin: 0
 
-            source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString()
-            cache: false
-            fillMode: Image.PreserveAspectFit
-            mipmap: true
+                property int pageNum: 1
+                property int showMode: 0 //0 for img, 1 for text
+
+                source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString()
+
+                cache: false
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+                onPageNumChanged: {
+
+
+                    if(pageNum > slider.to){
+
+                        pageNum = slider.to;
+                    }else if(pageNum < 1){
+                        pageNum = 1;
+                    }
+
+                    showWindow.anchors.horizontalCenter = showWindow.parent.horizontalCenter
+                    showWindow.anchors.verticalCenter = showWindow.parent.verticalCenter
+                    if(showImage2.isShow == true){
+                        if(pageNum == slider.to) pageNum -= 1;
+                        showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+                    }
+
+                    //console.log(showImage.width)
+                    //console.log(showImage.height)
+                    //console.log(showImage2.status)
+
+                }
+
+            }
+
+            Image{
+                 id: showImage2
+                 property bool isShow: false
+                 width: parent.width *0.48
+                 anchors.right: parent.right
+                 anchors.top: parent.top
+                 anchors.bottom: parent.bottom
+                 //source: "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+                 opacity: 0.0
+                 cache: false
+                 fillMode: Image.PreserveAspectFit
+                 mipmap: true
+
+            }
+
 
             Drag.active: mouseArea.drag.active
 
             states: State {
                     when: mouseArea.drag.active
 
-                    AnchorChanges { target: showImage; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
+                    AnchorChanges { target: showWindow; anchors.verticalCenter: undefined; anchors.horizontalCenter: undefined }
             }
-            onPageNumChanged: {
-                if(pageNum > slider.to){
-                    pageNum = slider.to;
-                }else if(pageNum < 1){
-                    pageNum = 1;
-                }
 
-                anchors.horizontalCenter = parent.horizontalCenter
-                anchors.verticalCenter = parent.verticalCenter
-            }
             function zoom(p){
                 var oldImgX;
                 var oldImgY;
-                oldImgX = showImage.x;
-                oldImgY = showImage.y;
-                showImage.width *= p;
-                showImage.height *= p;
-                showImage.x = showImage.parent.width/2.0 - p*(showImage.parent.width/2.0 - oldImgX);
-                showImage.y = showImage.parent.height/2.0 - p*(showImage.parent.height/2.0 - oldImgY);
+                oldImgX = showWindow.x;
+                oldImgY = showWindow.y;
+                showWindow.width *= p;
+                showWindow.height *= p;
+                showWindow.x = showWindow.parent.width/2.0 - p*(showWindow.parent.width/2.0 - oldImgX);
+                showWindow.y = showWindow.parent.height/2.0 - p*(showWindow.parent.height/2.0 - oldImgY);
             }
 
 
             Connections {
                 target: buttonZoomIn
-                onClicked: showImage.zoom(1.25)
+                onClicked: showWindow.zoom(1.25)
             }
             Connections{
                 target: buttonZoomOut
-                onClicked: showImage.zoom(0.8)
+                onClicked: showWindow.zoom(0.8)
             }
             Connections{
                 target: buttonAutoFit
                 onClicked:{
-                    showImage.width = showImage.parent.width;
-                    showImage.height = showImage.parent.height;
-                    showImage.anchors.horizontalCenter = mouseArea.horizontalCenter
-                    showImage.anchors.verticalCenter = mouseArea.verticalCenter
+                    showWindow.width = showWindow.parent.width;
+                    showWindow.height = showWindow.parent.height;
+                    showWindow.anchors.horizontalCenter = mouseArea.horizontalCenter
+                    showWindow.anchors.verticalCenter = mouseArea.verticalCenter
                 }
             }
+            Connections{
+                target: buttonTwoPageViewSwitch
+                onClicked:{
+                    if( showImage2.opacity == 0){
+                        // switch to show the second image
+                        showImage2.opacity = 1.0
+                        showImage2.isShow = true
+                        showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+                        //console.log(showImage2.status)
+                    }
+                    else{
+                        //switch to hide the second image
+                        showImage2.opacity = 0.0
+                        showImage2.isShow = false
+                        source: undefined
+                    }
+                }
+            }
+
+
+
         }
+
+
         onWidthChanged: {
-            showImage.anchors.horizontalCenter = mouseArea.horizontalCenter
-            showImage.anchors.verticalCenter = mouseArea.verticalCenter
+            showWindow.anchors.horizontalCenter = mouseArea.horizontalCenter
+            showWindow.anchors.verticalCenter = mouseArea.verticalCenter
         }
         onHeightChanged: {
-            showImage.anchors.horizontalCenter = mouseArea.horizontalCenter
-            showImage.anchors.verticalCenter = mouseArea.verticalCenter
+            showWindow.anchors.horizontalCenter = mouseArea.horizontalCenter
+            showWindow.anchors.verticalCenter = mouseArea.verticalCenter
         }
     }
     CustomSlider {
@@ -202,7 +263,11 @@ Window {
                     text: qsTr("PageDown")
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    onClicked: showImage.pageNum -=1
+                    onClicked: {
+                        if(showImage2.isShow == false)   showImage.pageNum -=1
+                        else showImage.pageNum -=2
+                    }
+
                 }
                 CustomButton {
                     id: buttonPageUp
@@ -210,7 +275,10 @@ Window {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: buttonPageDown.right
                     anchors.right: parent.right
-                    onClicked: showImage.pageNum +=1
+                    onClicked: {
+                        if(showImage2.isShow == false)   showImage.pageNum +=1
+                        else showImage.pageNum +=2
+                    }
                 }
             }
 
