@@ -57,8 +57,9 @@ public slots:
         bool right_exceed = false;
         int page_type = params.page_type;
         int page_num_current = params.page_num_current;
-
-        for(int i = 1 ; i<= qMax<int>(params.page_preload_left_size,params.page_preload_right_size); i++){
+        int page_preload_left_size = params.page_preload_left_size;
+        int page_preload_right_size = params.page_preload_right_size;
+        for(int i = 1 ; i<= qMax<int>(page_preload_left_size,page_preload_right_size); i++){
             if(page_num_current - i >= 1 && i <= page_preload_left_size){
                 loadAndCacheImage(page_num_current - i, page_type);
             }

@@ -440,6 +440,7 @@ release\moc_imgprovider.cpp: D:\Qt\5.10.0\msvc2017_64\include\QtQuick\QQuickImag
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qcache.h \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QReadWriteLock \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qreadwritelock.h \
+		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QMetaType \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QAtomicInt \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QThread \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qthread.h \
@@ -530,6 +531,7 @@ release\moc_preloadworker.cpp: D:\Qt\5.10.0\msvc2017_64\include\QtCore\QObject \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qcache.h \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QReadWriteLock \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qreadwritelock.h \
+		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QMetaType \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QAtomicInt \
 		..\Qt\preloadworker.h \
 		release\moc_predefs.h \
@@ -674,6 +676,7 @@ release\main.obj: ..\Qt\main.cpp D:\Qt\5.10.0\msvc2017_64\include\QtGui\QGuiAppl
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qcache.h \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QReadWriteLock \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qreadwritelock.h \
+		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QMetaType \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QAtomicInt \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QThread \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qthread.h
@@ -920,6 +923,7 @@ release\imgprovider.obj: ..\Qt\imgprovider.cpp ../Qt/imgprovider.h \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qcache.h \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QReadWriteLock \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qreadwritelock.h \
+		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QMetaType \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QAtomicInt \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QThread \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qthread.h
@@ -1007,6 +1011,7 @@ release\preloadworker.obj: ..\Qt\preloadworker.cpp ../Qt/preloadworker.h \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qcache.h \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QReadWriteLock \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\qreadwritelock.h \
+		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QMetaType \
 		D:\Qt\5.10.0\msvc2017_64\include\QtCore\QAtomicInt
 
 release\qrc_qml.obj: release\qrc_qml.cpp 

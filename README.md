@@ -1,4 +1,4 @@
-# ComicBookReader 
+# ComicBookReader
 A reader to support the different formats used for comics, just like some current software
 
 To be submitted:
@@ -32,10 +32,10 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
 
 ## TO DO (in priori order)
 - ~~make the picture load asynchronouslly.~~ Done
-- ~~add pre-load feature.~~
-  - ~~change cache to the thread-safe implementation, use QCahe and QReadWriteLock~~
-  - ~~make preload_worker always run in background until filling all the cache~~
-- change scaling bar to 3 buttons: zoom in, zoom out, auto-fit.
+- ~~add pre-load feature.~~ Done
+  - ~~change cache to the thread-safe implementation, use QCahe and QReadWriteLock~~ Done
+  - ~~make preload_worker always run in background until filling all the cache~~ Done
+- ~~change scaling bar to 3 buttons: zoom in, zoom out, auto-fit.~~ Done
 - link the process part to qt, finish the button T/I/R (can use the popup view: Text, Image, Raw).
 - improve the image process part, including two parts: picture, and test.
 - finish the button "Two".

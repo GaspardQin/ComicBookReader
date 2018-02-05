@@ -22,7 +22,7 @@ Window {
 
         drag.target: showImage
         enabled: true
-        property double factor: 2.0
+        property double factor: 1.25
 
         property double oldImgX: 0.0
         property double oldImgY: 0.0
@@ -37,14 +37,14 @@ Window {
                     showImage.height *= factor
                     showImage.x = oldImgX - (factor - 1)*(mouseX - oldImgX)
                     showImage.y = oldImgY - (factor -1)*(mouseY - oldImgY)
-                    scrollSlider.value *= factor
+
                 }
                 else if( wheel.angleDelta.y < 0 ){                        // zoom out
                     showImage.width /= factor
                     showImage.height /= factor
                     showImage.x = oldImgX + (1 - 1/factor)*(mouseX - oldImgX)
                     showImage.y = oldImgY + (1 - 1/factor)*(mouseY - oldImgY)
-                    scrollSlider.value /= factor
+
                 }
 
             }
@@ -84,20 +84,43 @@ Window {
                 anchors.horizontalCenter = parent.horizontalCenter
                 anchors.verticalCenter = parent.verticalCenter
             }
-            Connections {
-                target: scrollSlider
-                property double oldImgX
-                property double oldImgY
-                onMoved:{
-                    oldImgX = showImage.x
-                    oldImgY = showImage.y
-                    showImage.width = showImage.parent.width * scrollSlider.value
-                    showImage.height = showImage.parent.height * scrollSlider.value
-                    showImage.x = showImage.parent.width/2.0 - scrollSlider.value*(showImage.parent.width/2.0 - oldImgX)
-                    showImage.y = showImage.parent.height/2.0 - scrollSlider.value*(showImage.parent.height/2.0 - oldImgY)
-                }
+            function zoom(p){
+                var oldImgX;
+                var oldImgY;
+                oldImgX = showImage.x;
+                oldImgY = showImage.y;
+                showImage.width *= p;
+                showImage.height *= p;
+                showImage.x = showImage.parent.width/2.0 - p*(showImage.parent.width/2.0 - oldImgX);
+                showImage.y = showImage.parent.height/2.0 - p*(showImage.parent.height/2.0 - oldImgY);
             }
 
+
+            Connections {
+                target: buttonZoomIn
+                onClicked: showImage.zoom(1.25)
+            }
+            Connections{
+                target: buttonZoomOut
+                onClicked: showImage.zoom(0.8)
+            }
+            Connections{
+                target: buttonAutoFit
+                onClicked:{
+                    showImage.width = showImage.parent.width;
+                    showImage.height = showImage.parent.height;
+                    showImage.anchors.horizontalCenter = mouseArea.horizontalCenter
+                    showImage.anchors.verticalCenter = mouseArea.verticalCenter
+                }
+            }
+        }
+        onWidthChanged: {
+            showImage.anchors.horizontalCenter = mouseArea.horizontalCenter
+            showImage.anchors.verticalCenter = mouseArea.verticalCenter
+        }
+        onHeightChanged: {
+            showImage.anchors.horizontalCenter = mouseArea.horizontalCenter
+            showImage.anchors.verticalCenter = mouseArea.verticalCenter
         }
     }
     CustomSlider {
@@ -193,44 +216,18 @@ Window {
 
             CustomSeparator{}
             CustomButton {
-                id: buttonScaling
-                text: qsTr("Scaling")
-                onClicked: scrollSliderPopup.open()
-                Popup {
-                    id: scrollSliderPopup
-
-                    width: 20
-                    height: 100
-                    x: parent.width/2 - width/2
-                    y: -height-5
-                    focus: true
-                    padding: 0
-                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                    opacity: 0.9
-                    onOpened: {
-                        mouseArea.enabled = false
-                    }
-                    onClosed: {
-                        mouseArea.enabled = true
-                    }
-
-                    CustomSliderVertical{
-                        id: scrollSlider
-                        x: parent.width/2 - width/2
-                        y: parent.height/2 - height/2
-                        height: 100
-                        width: 20
-                        opacity: 1
-                        from:0.25
-                        to:5.0
-                        value:1.0
-                        stepSize: 0.05
-                        snapMode: Slider.SnapAlways
-
-
-                    }
-                }
-
+                id: buttonZoomIn
+                text: qsTr("ZoomIn")
+            }
+            CustomSeparator{}
+            CustomButton {
+                id: buttonZoomOut
+                text: qsTr("ZoomOut")
+            }
+            CustomSeparator{}
+            CustomButton {
+                id: buttonAutoFit
+                text: qsTr("AutoFit")
             }
             CustomSeparator{}
             CustomButton {
