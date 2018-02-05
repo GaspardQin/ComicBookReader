@@ -183,6 +183,7 @@ debug\qrc_qml.cpp: ..\Qt\qml.qrc \
 		..\Qt\CustomSliderVertical.qml \
 		..\Qt\CustomButton.qml \
 		..\Qt\CustomSlider.qml \
+		..\Qt\CustomSeparatorHorizontal.qml \
 		..\Qt\CustomSeparator.qml \
 		..\Qt\main.qml
 	D:\Qt\5.10.0\msvc2017_64\bin\rcc.exe -name qml ..\Qt\qml.qrc -o debug\qrc_qml.cpp

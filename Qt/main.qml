@@ -231,8 +231,44 @@ Window {
             }
             CustomSeparator{}
             CustomButton {
-                id: buttonTextImageSwitch
-                text: qsTr("T/I")//text or image
+                id: buttonModeSwitch
+                text: qsTr("Mode")//text or image
+                onClicked: modePopup.open()
+                Popup{
+                    id: modePopup
+                    width:60
+                    height:150
+                    x: parent.width/2 - width/2
+                    y: -height-5
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                    padding: 0
+                    ColumnLayout{
+                        anchors.fill: parent
+                        CustomButton{
+                            id:buttonTextMode
+                            text:qsTr("TextMode")
+                            height: parent.height/5
+                            width: parent.width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                        CustomSeparatorHorizontal{}
+                        CustomButton{
+                            id:buttonImageMode
+                            text:qsTr("ImageMode")
+                            height: parent.height/5
+                            width: parent.width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                        CustomSeparatorHorizontal{}
+                        CustomButton{
+                            id:buttonRawMode
+                            text: qsTr("RawMode")
+                            height: parent.height/5
+                            width: parent.width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                    }
+                }
             }
             CustomSeparator{}
             CustomButton {

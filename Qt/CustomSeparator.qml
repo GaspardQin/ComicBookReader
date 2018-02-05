@@ -4,12 +4,12 @@ ToolSeparator {
     padding: 4
     rightPadding: 2
     leftPadding: 2
-    topPadding: vertical ? 2 : 10
-    bottomPadding: vertical ? 2 : 10
+    topPadding: 2
+    bottomPadding: 2
 
     contentItem: Rectangle {
-        implicitWidth: parent.vertical ? 1 : 24
-        implicitHeight: parent.vertical ? 24 : 1
+        implicitWidth: 1
+        implicitHeight: 24
         color: "#c3c3c3"
     }
 }
