@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.0
 
 Window {
     id: window
@@ -242,8 +243,23 @@ Window {
                     enter: Transition {
                         NumberAnimation { property: "opacity"; from: 0.0; to: 1.0 }
                     }
-                    MenuItem {
+                    CustomButton {
                         text: "New..."
+                        FileDialog {
+                            id: fileDialog
+                            title: "Please choose a file"
+                            folder: shortcuts.home
+                            onAccepted: {
+                                console.log("You chose: " + fileDialog.fileUrls)
+                                Qt.quit()
+                            }
+                            onRejected: {
+                                console.log("Canceled")
+                                Qt.quit()
+                            }
+
+                        }
+                        onClicked: fileDialog.open()
                     }
                     MenuItem {
                         text: "Open..."
