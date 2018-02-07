@@ -21,6 +21,9 @@
     <ClInclude Include="..\include\image_process.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="extraction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">

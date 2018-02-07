@@ -3,33 +3,27 @@
 #include <map>
 #include <opencv2\opencv.hpp>
 #include <vector>
-class ArchiveFormatInterface {
-	//the interface for different libararies of archive files
 
-};
 
 class ArchiveInterface
 {
 // class for archiving file, unzip the image files
 // Use OpenCV, format for image: "cv::Mat"
 public:
-	ArchiveInterface() ;
-	~ArchiveInterface() ;
-
+	
 	bool virtual loadArchivedFiles(std::string file_path) = 0;
 	// Use 7z function
 	//load to private element: archive_loaded.
 
 	bool virtual loadOneImage(int num, cv::Mat &a_image) = 0;
-
 	// Use OpenCV function
 	//load one image from archive_loaded
 
+	
 
 
 
-private:
-	ArchiveFormatInterface archive_loaded;
+	
 };
 
 

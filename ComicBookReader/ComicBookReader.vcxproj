@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\comic_book_reader_contract.h" />
     <ClInclude Include="..\include\image_process.h" />
+    <ClInclude Include="extraction.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp" />
