@@ -20,7 +20,7 @@ public:
     {
         // for debug
         setPageNumTotal(10);
-        image_processor.setImageFakePath(path_debug.toStdString());
+       
 
         //for parallel reloading
 
@@ -51,7 +51,9 @@ public:
         QObject* slidbar_ptr = root_object_ptr->findChild<QObject*>("SlideBar");
         slidbar_ptr->setProperty("to", page_num_total);
     }
-
+	QImage cvMatToQImage(const cv::Mat *cv_image_ptr) {
+		return QImage((uchar*)cv_image_ptr->data, cv_image_ptr->cols, cv_image_ptr->rows, cv_image_ptr->step, QImage::Format_RGB888);
+	}
 
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize)
     {
@@ -65,7 +67,7 @@ public:
         if(page_type != 0 && page_type !=1){
             // need more specific exception process
             std::cout<<"error text mode"<<std::endl;
-            return image_data_ptr->image; //fake return
+            return cvMatToQImage(image_data_ptr->cv_image_ptr); //fake return
         }
 
         ImagePreloadParams test_change_params(current_page,0,0,page_type);
@@ -79,11 +81,16 @@ public:
             if(image_data_ptr->page_type == page_type){
 
                  if(size){
-                     size->setWidth(image_data_ptr->image.width());
-                     size->setHeight(image_data_ptr->image.height());
+					 cv::Size sz = image_data_ptr->cv_image_ptr->size();
+                     size->setWidth(sz.width);
+                     size->setHeight(sz.height);
                  }
                 cache_lock.unlock();
-                return image_data_ptr->image;
+
+				// Send task to preloadWorker
+				preloadImage(current_page);
+                
+				return cvMatToQImage(image_data_ptr->cv_image_ptr);
             }
         }
         else cache_lock.unlock();
@@ -92,7 +99,7 @@ public:
 
         //if not
         image_data_ptr = new ImageData;
-        debugLoadImage(current_page,image_data_ptr->image);
+		image_processor.getImage(current_page, page_type, *(image_data_ptr->cv_image_ptr));
         //save to the cache
         image_data_ptr->page_type = page_type;
         cache_lock.lockForWrite();
@@ -101,15 +108,16 @@ public:
 		
 
          if(size){
-             size->setWidth(image_data_ptr->image.width());
-             size->setHeight(image_data_ptr->image.height());
+			 cv::Size sz = image_data_ptr->cv_image_ptr->size();
+			 size->setWidth(sz.width);
+			 size->setHeight(sz.height);
          }
 
 
         // Send task to preloadWorker
-       // preloadImage(current_page);
+        preloadImage(current_page);
 
-        return image_data_ptr->image;
+        return cvMatToQImage(image_data_ptr->cv_image_ptr);
     }
     void preloadImage(const int page_num){
         ImagePreloadParams params;
@@ -122,28 +130,7 @@ public:
 
 
     }
-
-    bool debugLoadImage(const int page_num, QImage& load_image){
-
-		/*
-        QString image_path = path_debug;
-        image_path += QString::number(page_num); //page number
-        image_path += ".png";
-		QImage lload_image =  QImage(image_path);
-		*/
-        cv::Mat* cv_image_ptr = new cv::Mat;
-        image_processor.getImage(page_num,page_type, *cv_image_ptr);
-		
-		//ATTENTION: the QImage tranformed from cv::Mat shares data with orginal cv::Mat.
-		//For this reason, cv_image_ptr should use "new" to create to avoid deleting when this function finishs.
-		load_image = QImage((uchar*)cv_image_ptr->data, cv_image_ptr->cols, cv_image_ptr->rows, cv_image_ptr->step, QImage::Format_RGB888);
-		
-
-
-
-        return true;
-    }
-
+	
     void setPageNumTotal(int value){
         page_num_total = value;
     }
@@ -156,7 +143,7 @@ signals:
     void pageChanged(const ImagePreloadParams &);
 private:
     ImageProcess image_processor;
-    QString path_debug = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
+   // QString path_debug = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
     int page_num_total = 1; //init value, cannot set 0 because of the calculation in slidebar.
     QObject *root_object_ptr;
     int page_type = 0; //by default, page_type set to image type. 0 image type, 1 text image

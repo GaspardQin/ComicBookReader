@@ -18,17 +18,6 @@ public:
          image_processor.setImageFakePath(path_debug.toStdString());
     }
 
-    bool debugLoadImage(const int page_num, QImage* load_image){
-
-        //QString image_path = path_debug;
-        //image_path += QString::number(page_num); //page number
-        //image_path += ".png";
-        //*load_image =  QImage(image_path);
-        cv::Mat cv_image;
-        image_processor.getImage(page_num,new_params.page_type,cv_image);
-        *load_image = QImage(cv_image.data, cv_image.cols, cv_image.rows, cv_image.step, QImage::Format_RGB888);
-        return true;
-    }
     void loadAndCacheImage(const int page_num, const int page_type){
         //check if it already exists
         ImageData* image_data_ptr;
@@ -44,7 +33,7 @@ public:
 
         //if it dosent exist
         image_data_ptr = new ImageData;
-        debugLoadImage(page_num, &(image_data_ptr->image));
+		image_processor.getImage(page_num, page_type, *(image_data_ptr->cv_image_ptr));
         image_data_ptr->page_type = page_type;
         cache_lock.lockForWrite();
         cache.insert(page_num,image_data_ptr);

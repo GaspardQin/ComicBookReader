@@ -5,6 +5,9 @@ class ImageProcess:public ImageProcessInterface {
 #define GRAPHIC 1
 #define RAW 2
 public:
+	ImageProcess(){
+		testPath = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
+	}
 	bool autoAdjustImage(cv::Mat& input_image, cv::Mat& output_image, int image_type_flag) {
 		// image_type_flags = 0 for image whose the type is text
 		// image_type_flags = 1 for image whose the type is graphics

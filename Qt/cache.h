@@ -5,12 +5,20 @@
 #include <QImage>
 #include <QReadWriteLock>
 #include <QMetaType>
+#include <opencv2\opencv.hpp>
 class ImageData
 {
 public:
     //int page_num;
     int page_type;
-    QImage image;
+    cv::Mat *cv_image_ptr;
+
+	ImageData() {
+		cv_image_ptr = new cv::Mat;
+	}
+	~ImageData(){
+		free(cv_image_ptr);
+	}
 };
 
 class ImagePreloadParams
