@@ -30,6 +30,13 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
 - Add free drag and free scaling(ctrl + wheel) feature. The center of scaling is always the mouse position.
 - Add multi-processing preload feature, a worker in background will always preload images, and a thread-safe cache is used to caching the images.
 
+- Use a special slight method to transform cv::Mat to QImage, the ref is here
+  https://github.com/dbzhang800/QtOpenCV
+  Attention: the transfomed QImage uses the memory shared with the orignal cv::Mat, so make sure the orignal cv::Mat cannot be deleted.(Both QImage and cv::Mat inside use a pointer to save the data in a new bloc of memory, which is shared in this quick transformation.)
+
+- After having finished the UI part, the project is re-managed by Visual Studio, which is much more fast and easy to debug. The new VS project is in the Qt folder.
+
+
 ## TO DO (in priori order)
 - ~~make the picture load asynchronouslly.~~ Done
 - ~~add pre-load feature.~~ Done
@@ -38,6 +45,7 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
 - ~~change scaling bar to 3 buttons: zoom in, zoom out, auto-fit.~~ Done
 - link the process part to qt, finish the button T/I/R (can use the popup view: Text, Image, Raw).
 - improve the image process part, including two parts: picture, and test.
+- add adjust bar for image process
 - ~~finish the button "Two".~~ Done
 - link the uncompress part.
 - finish the button "Open".(actually no need to use the popup view).

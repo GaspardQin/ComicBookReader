@@ -51,10 +51,6 @@ public:
 	// show the image with low resolution quickly
 	// need to be resized
 
-	bool virtual autoAdjustForTwoImages(cv::Mat& input_image1, cv::Mat& input_image2, cv::Mat& output_image, int image_type_flag1, int image_type_flag2, int height, int width) = 0;
-	//used for showing 2 images in the same screen
-	// output_image is a whole image which contains 2 parts
-
 	bool virtual getImage(int num, int image_type_flag, cv::Mat& output_image) = 0;
 	//first step: check if the page exists in cache, if not, processing the images
 

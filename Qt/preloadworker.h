@@ -5,20 +5,28 @@
 #include <QImage>
 #include <cache.h>
 #include <QAtomicInt>
+#include <opencv2/opencv.hpp>
+#include "image_process.h"
 class PreLoadWorker : public QObject
 {
     Q_OBJECT
 public:
     PreLoadWorker(){
          page_current_changed.store(0);
+
+         //for debug
+         image_processor.setImageFakePath(path_debug.toStdString());
     }
 
     bool debugLoadImage(const int page_num, QImage* load_image){
 
-        QString image_path = path_debug;
-        image_path += QString::number(page_num); //page number
-        image_path += ".png";
-        *load_image =  QImage(image_path);
+        //QString image_path = path_debug;
+        //image_path += QString::number(page_num); //page number
+        //image_path += ".png";
+        //*load_image =  QImage(image_path);
+        cv::Mat cv_image;
+        image_processor.getImage(page_num,new_params.page_type,cv_image);
+        *load_image = QImage(cv_image.data, cv_image.cols, cv_image.rows, cv_image.step, QImage::Format_RGB888);
         return true;
     }
     void loadAndCacheImage(const int page_num, const int page_type){
@@ -45,7 +53,7 @@ public:
 
 private:
     QString path_debug = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
-
+    ImageProcess image_processor;
     int page_num_total;
     QAtomicInt page_current_changed;
     ImagePreloadParams new_params;

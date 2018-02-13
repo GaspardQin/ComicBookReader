@@ -14,8 +14,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 ##########
 #Files for opencv
-INCLUDEPATH += ..\3dparts\include\opencv\
-LIBS += -L..\3dparts\lib\ -lopencv_world331.lib
+INCLUDEPATH += $$PWD\..\3dparts\include\opencv
+LIBS += -L"$$PWD\\..\\3dparts\\lib\\opencv" \
+    -lopencv_world331d
+
 ##########
 #Files for ComicBookReader
 INCLUDEPATH += ..\include\
@@ -44,6 +46,8 @@ HEADERS += \
     showimage.h \
     imgprovider.h \
     preloadworker.h \
-    cache.h
+    cache.h \
+    ../include/comic_book_reader_contract.h \
+    ../include/image_process.h
 
 DISTFILES +=

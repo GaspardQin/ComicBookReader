@@ -6,6 +6,8 @@
 #include <QCache>
 #include <QThread>
 #include "cache.h"
+#include "image_process.h"
+#include <opencv2/opencv.hpp>
 
 class ImgProvider :  public QObject, public QQuickImageProvider
 {
@@ -16,9 +18,9 @@ public:
     ImgProvider()
         : QQuickImageProvider(QQuickImageProvider::Image, QQmlImageProviderBase::ForceAsynchronousImageLoading )
     {
-
-        setPageNumTotal(10); // for debug
-
+        // for debug
+        setPageNumTotal(10);
+        image_processor.setImageFakePath(path_debug.toStdString());
 
         //for parallel reloading
 
@@ -76,7 +78,6 @@ public:
             image_data_ptr = cache.object(current_page);
             if(image_data_ptr->page_type == page_type){
 
-                // QSize show_size(image.width(), image.height());
                  if(size){
                      size->setWidth(image_data_ptr->image.width());
                      size->setHeight(image_data_ptr->image.height());
@@ -91,14 +92,14 @@ public:
 
         //if not
         image_data_ptr = new ImageData;
-        debugLoadImage(current_page,&(image_data_ptr->image));
+        debugLoadImage(current_page,image_data_ptr->image);
         //save to the cache
         image_data_ptr->page_type = page_type;
         cache_lock.lockForWrite();
         cache.insert(current_page,image_data_ptr);
         cache_lock.unlock();
+		
 
-        // QSize show_size(image.width(), image.height());
          if(size){
              size->setWidth(image_data_ptr->image.width());
              size->setHeight(image_data_ptr->image.height());
@@ -106,7 +107,7 @@ public:
 
 
         // Send task to preloadWorker
-        preloadImage(current_page);
+       // preloadImage(current_page);
 
         return image_data_ptr->image;
     }
@@ -115,18 +116,31 @@ public:
         params.page_num_current = page_num;
         params.page_preload_left_size = 5;
         params.page_preload_right_size = 10;
-        params.page_type = 0;
+        params.page_type = page_type;
 
         emit preloadSignals(params);
 
 
     }
-    bool debugLoadImage(const int page_num, QImage* load_image){
 
+    bool debugLoadImage(const int page_num, QImage& load_image){
+
+		/*
         QString image_path = path_debug;
         image_path += QString::number(page_num); //page number
         image_path += ".png";
-        *load_image =  QImage(image_path);
+		QImage lload_image =  QImage(image_path);
+		*/
+        cv::Mat* cv_image_ptr = new cv::Mat;
+        image_processor.getImage(page_num,page_type, *cv_image_ptr);
+		
+		//ATTENTION: the QImage tranformed from cv::Mat shares data with orginal cv::Mat.
+		//For this reason, cv_image_ptr should use "new" to create to avoid deleting when this function finishs.
+		load_image = QImage((uchar*)cv_image_ptr->data, cv_image_ptr->cols, cv_image_ptr->rows, cv_image_ptr->step, QImage::Format_RGB888);
+		
+
+
+
         return true;
     }
 
@@ -141,6 +155,7 @@ signals:
     void setPreloadPageNumTotal(const int &);
     void pageChanged(const ImagePreloadParams &);
 private:
+    ImageProcess image_processor;
     QString path_debug = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
     int page_num_total = 1; //init value, cannot set 0 because of the calculation in slidebar.
     QObject *root_object_ptr;
