@@ -64,10 +64,10 @@ public:
         int current_page = input_list[0].toInt();
 
         page_type = input_list[1].toInt();
-        if(page_type != 0 && page_type !=1){
+        if(page_type != 0 && page_type !=1 && page_type != 2){
             // need more specific exception process
             std::cout<<"error text mode"<<std::endl;
-            return cvMatToQImage(image_data_ptr->cv_image_ptr); //fake return
+            return QImage() ; //fake return
         }
 
         ImagePreloadParams test_change_params(current_page,0,0,page_type);
@@ -88,10 +88,18 @@ public:
                 cache_lock.unlock();
 
 				// Send task to preloadWorker
-				preloadImage(current_page);
+				//preloadImage(current_page);
                 
 				return cvMatToQImage(image_data_ptr->cv_image_ptr);
             }
+			else
+			{
+				//delete the wrong cache with wrong type
+				cache_lock.unlock();
+				cache_lock.lockForWrite();
+				cache.remove(current_page);
+				cache_lock.unlock();
+			}
         }
         else cache_lock.unlock();
 

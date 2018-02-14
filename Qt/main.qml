@@ -67,7 +67,7 @@ Window {
                 anchors.rightMargin: 0
 
                 property int pageNum: 1
-                property int showMode: 0 //0 for img, 1 for text
+                property int showMode: 2 //0 for text, 1 for graphic, 2 for raw
 
                 source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString()
 
@@ -170,8 +170,32 @@ Window {
                     }
                 }
             }
-
-
+			Connections{
+				target: buttonTextMode
+				onClicked:{
+					showImage.showMode = 0
+				}
+			}
+			Connections{
+				target: buttonGraphicMode
+				onClicked:{
+					showImage.showMode = 1
+				}
+			}
+			Connections{
+				target: buttonRawMode
+				onClicked:{
+					showImage.showMode = 2
+				}
+			}
+			Connections{
+				target:showImage
+				onShowModeChanged:{
+					if( showImage2.isShow == true){
+						 showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+					}
+				}
+			}
 
         }
 
@@ -337,7 +361,7 @@ Window {
                         }
                         CustomSeparatorHorizontal{}
                         CustomButton{
-                            id:buttonImageMode
+                            id:buttonGraphicMode
                             text:qsTr("ImageMode")
                             height: parent.height/5
                             width: parent.width

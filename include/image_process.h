@@ -112,7 +112,10 @@ public:
 		///////////////////////////////////
 
         //cv::imshow("test", input_image);
-
+		if (image_type_flag == RAW) {
+			output_image = input_image;
+			return true;
+		}
 		assert(autoAdjustImage(input_image, output_image, image_type_flag));
 
 		return true;
