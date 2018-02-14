@@ -35,15 +35,19 @@ public:
 
 		/****smooth the image****/
 		//could be slow by using GaussianBlur, could be changed to other linear filter.
-		cv::GaussianBlur(temp_image, temp_image, cv::Size(3, 3), 0, 0);
-
+		cv::GaussianBlur(temp_image, temp_image, cv::Size(5,5), 0, 0);
+		//smooth path is included in adaptiveThreshold
+		
+		cv::equalizeHist(temp_image, temp_image);
 
 
 		/****Auto Threhold divise into white(paper) and black(text)****/
-		cv::adaptiveThreshold(temp_image, output_image, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 5, 0);
+		cv::adaptiveThreshold(temp_image, output_image, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, CV_THRESH_BINARY, 21, 10);
 		//int blocksize can only be impaire
-		//if slow, change ADAPTIVE_THRESH_GAUSSIAN_C into CV_ADAPTIVE_THRESH_MEAN_C
+		//if slow, change ADAPTIVE_THRESH_GAUSSIAN_C into ADAPTIVE_THRESH_MEAN_C
 		//Could use GUI to change blocksize.
+
+		
 		cvtColor(output_image, output_image, CV_GRAY2RGB);
 		return true;
 	}
@@ -55,8 +59,9 @@ public:
 		/****smooth the image****/
 		//could be slow by using GaussianBlur, could be changed to other linear filter.
 		cv::GaussianBlur(input_image, temp_image, cv::Size(3, 3), 0, 0);
-
+		
 		/****autojustment by equilize Hist****/
+		/*
 		std::vector<cv::Mat> channels;
 		split(input_image, channels); 		//Split input_image into 3 channels RGB
 		
@@ -68,12 +73,12 @@ public:
 		cv::equalizeHist(channels[1], channels[1]);
 
 		cv::merge(channels, temp_image);
-
-
+		*/
+		
 		/****autojustment by Laplace filter (Increasing local contrast)****/
 		cv::Mat kernel = (cv::Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
 		cv::filter2D(temp_image, temp_image, temp_image.depth(), kernel);
-		//cvtColor(output_image, output_image, CV_GRAY2RGB);
+		cvtColor(temp_image, temp_image, CV_BGR2RGB);
 		output_image = temp_image;
 		return true;
 	}
@@ -93,7 +98,7 @@ public:
 
 
 	cv::Mat getImageFake(int num, std::string path) {
-        std::string testPath = path + std::to_string(num) +  ".png";
+        std::string testPath = path + std::to_string(num) +  ".jpg";
 		cv::Mat test_img = cv::imread(testPath, CV_LOAD_IMAGE_COLOR);
 
 		return test_img;
@@ -113,7 +118,7 @@ public:
 
         //cv::imshow("test", input_image);
 		if (image_type_flag == RAW) {
-			output_image = input_image;
+			cvtColor(input_image, output_image, CV_BGR2RGB);
 			return true;
 		}
 		assert(autoAdjustImage(input_image, output_image, image_type_flag));

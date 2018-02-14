@@ -35,6 +35,7 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
   Attention: the transfomed QImage uses the memory shared with the orignal cv::Mat, so make sure the orignal cv::Mat cannot be deleted.(Both QImage and cv::Mat inside use a pointer to save the data in a new bloc of memory, which is shared in this quick transformation.)
 - After having finished the UI part, the project is re-managed by Visual Studio, which is much more fast and easy to debug. The new VS project is in the Qt folder.
 - Use original cv::Mat format to cache the images instead of QImage, this can solve the problem of management of memory. (If QImage is cached, the cv::Mat cannot be freed to keep the data of QImage, but when QImage is automatically freed by cache, cv::Mat cannot be freed automatically).
+- Realize the button T/I/R (mode switch)
 
 ## TO DO (in priori order)
 - ~~make the picture load asynchronouslly.~~ Done
@@ -42,9 +43,10 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
   - ~~change cache to the thread-safe implementation, use QCahe and QReadWriteLock~~ Done
   - ~~make preload_worker always run in background until filling all the cache~~ Done
 - ~~change scaling bar to 3 buttons: zoom in, zoom out, auto-fit.~~ Done
-- link the process part to qt, finish the button T/I/R (can use the popup view: Text, Image, Raw).
-- improve the image process part, including two parts: picture, and test.
+- ~~link the process part to qt, finish the button T/I/R (can use the popup view: Text, Image, Raw).~~ Done
+- ~~improve the image process part, including two parts: picture, and test.~~ Done
 - add adjust bar for image process
 - ~~finish the button "Two".~~ Done
 - link the uncompress part.
+- add parallel feature to uncompress part. One thread to read the current page, one thread to read the neighbour pages into buffer
 - finish the button "Open".(actually no need to use the popup view).

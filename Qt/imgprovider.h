@@ -19,7 +19,7 @@ public:
         : QQuickImageProvider(QQuickImageProvider::Image, QQmlImageProviderBase::ForceAsynchronousImageLoading )
     {
         // for debug
-        setPageNumTotal(10);
+        setPageNumTotal(12);
        
 
         //for parallel reloading
