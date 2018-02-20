@@ -1,12 +1,14 @@
 #pragma once
 #include "comic_book_reader_contract.h"
+#include "ArchiveReader.h"
 class ImageProcess:public ImageProcessInterface {
 #define TEXT 0
 #define GRAPHIC 1
 #define RAW 2
 public:
 	ImageProcess(){
-		testPath = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
+		
+		is_loaded = false;
 	}
 	bool autoAdjustImage(cv::Mat& input_image, cv::Mat& output_image, int image_type_flag) {
 		// image_type_flags = 0 for image whose the type is text
@@ -94,29 +96,20 @@ public:
 
 
 
-
-
-
-	cv::Mat getImageFake(int num, std::string path) {
-        std::string testPath = path + std::to_string(num) +  ".jpg";
-		cv::Mat test_img = cv::imread(testPath, CV_LOAD_IMAGE_COLOR);
-
-		return test_img;
-
-	}
-
-	void setImageFakePath(std::string path) {
-		testPath = path;
+	bool loadArchive(std::string path) {
+		archive_path = path;
+		if(!archive_reader.loadArchivedFiles(archive_path)) return false;
+		page_num_total = archive_reader.getPageNumTotal();
+		is_loaded = true;
+		return true;
 	}
 
 	bool getImage(int num, int image_type_flag, cv::Mat& output_image)
 	{
-		///////////////////////////////////
-		// need to be replaced by archivedFunctions
-        cv::Mat input_image = getImageFake(num,testPath);
-		///////////////////////////////////
 
-        //cv::imshow("test", input_image);
+		cv::Mat input_image;
+		archive_reader.loadOneImage(num, input_image);
+
 		if (image_type_flag == RAW) {
 			cvtColor(input_image, output_image, CV_BGR2RGB);
 			return true;
@@ -126,7 +119,14 @@ public:
 		return true;
 
 	}
-
+	int getPageNumTotal() {
+		if(is_loaded==true) 
+			return page_num_total;
+		else return 1;
+	}
 private:
-	std::string testPath;//Need to be deleted!!!!!!!!!!!!
+	std::string archive_path;//Need to be deleted!!!!!!!!!!!!
+	ArchiveReader archive_reader;
+	int page_num_total;
+	bool is_loaded;
 };

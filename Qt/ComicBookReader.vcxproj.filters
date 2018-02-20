@@ -70,6 +70,9 @@
     <ClCompile Include="GeneratedFiles\qrc_qml.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ArchiveReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cache.h">
@@ -90,6 +93,9 @@
     <CustomBuild Include="showimage.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <ClInclude Include="..\include\ArchiveReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">

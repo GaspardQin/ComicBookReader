@@ -19,12 +19,12 @@ public:
         : QQuickImageProvider(QQuickImageProvider::Image, QQmlImageProviderBase::ForceAsynchronousImageLoading )
     {
         // for debug
-        setPageNumTotal(12);
-       
+		image_processor.loadArchive(debug_path);
+		setPageNumTotal(image_processor.getPageNumTotal());
 
         //for parallel reloading
 
-        PreLoadWorker *preload_worker = new PreLoadWorker;
+        PreLoadWorker *preload_worker = new PreLoadWorker(debug_path);
         preload_worker->moveToThread(&preloadThread);
         connect(&preloadThread,&QThread::finished, preload_worker, &QObject::deleteLater);
         connect(this, &ImgProvider::preloadSignals, preload_worker, &PreLoadWorker::parallelLoadPage);
@@ -88,7 +88,7 @@ public:
                 cache_lock.unlock();
 
 				// Send task to preloadWorker
-				//preloadImage(current_page);
+				preloadImage(current_page);
                 
 				return cvMatToQImage(image_data_ptr->cv_image_ptr);
             }
@@ -152,6 +152,7 @@ signals:
 private:
     ImageProcess image_processor;
    // QString path_debug = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
+	std::string debug_path = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/Injustice2.cbr";
     int page_num_total = 1; //init value, cannot set 0 because of the calculation in slidebar.
     QObject *root_object_ptr;
     int page_type = 0; //by default, page_type set to image type. 0 image type, 1 text image

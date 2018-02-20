@@ -11,11 +11,11 @@ class PreLoadWorker : public QObject
 {
     Q_OBJECT
 public:
-    PreLoadWorker(){
+    PreLoadWorker(std::string path){
          page_current_changed.store(0);
-
+		 archive_path = path;
          //for debug
-         image_processor.setImageFakePath(path_debug.toStdString());
+         image_processor.loadArchive(path);
     }
 
     void loadAndCacheImage(const int page_num, const int page_type){
@@ -41,7 +41,7 @@ public:
     }
 
 private:
-    QString path_debug = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
+	std::string archive_path;
     ImageProcess image_processor;
     int page_num_total;
     QAtomicInt page_current_changed;

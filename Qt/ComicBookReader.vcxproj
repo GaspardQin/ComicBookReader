@@ -42,6 +42,7 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="..\debug_config.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -137,6 +138,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\ArchiveReader.cpp" />
     <ClCompile Include="Debug\moc_imgprovider.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -167,6 +169,7 @@
     <ClCompile Include="showimage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\ArchiveReader.h" />
     <ClInclude Include="cache.h" />
     <ClInclude Include="..\include\comic_book_reader_contract.h" />
     <ClInclude Include="..\include\image_process.h" />
