@@ -17,17 +17,30 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += $$PWD\..\3dparts\include\opencv
 LIBS += -L"$$PWD\\..\\3dparts\\lib\\opencv" \
     -lopencv_world331d
+##########
+#Files for unarr
+INCLUDEPATH += $$PWD\..\3dparts\include\unarr
+LIBS += -L"$$PWD\\..\\3dparts\\lib\\unarrlib" \
+    -lunarrlib
+
+##########
+#Files for zlib
+INCLUDEPATH += $$PWD\..\3dparts\include\zlib
+LIBS += -L"$$PWD\\..\\3dparts\\lib\\zlib" \
+    -lzlib
 
 ##########
 #Files for ComicBookReader
 INCLUDEPATH += ..\include\
+INCLUDEPATH += ..\src\
 ##########
 
 
 SOURCES += main.cpp \
     showimage.cpp \
     imgprovider.cpp \
-    preloadworker.cpp
+    preloadworker.cpp\
+    ../src/ArchiveReader.cpp
 
 RESOURCES += qml.qrc
 
@@ -48,6 +61,7 @@ HEADERS += \
     preloadworker.h \
     cache.h \
     ../include/comic_book_reader_contract.h \
-    ../include/image_process.h
+    ../include/image_process.h \
+    ../include/ArchiveReader.h
 
 DISTFILES +=

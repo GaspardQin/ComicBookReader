@@ -11,11 +11,12 @@ class PreLoadWorker : public QObject
 {
     Q_OBJECT
 public:
-    PreLoadWorker(std::string path){
+    PreLoadWorker(){
          page_current_changed.store(0);
-		 archive_path = path;
+		 is_path_changed = false;
+		 //archive_path = path;
          //for debug
-         image_processor.loadArchive(path);
+         //image_processor.loadArchive(path);
     }
 
     void loadAndCacheImage(const int page_num, const int page_type){
@@ -46,6 +47,7 @@ private:
     int page_num_total;
     QAtomicInt page_current_changed;
     ImagePreloadParams new_params;
+	bool is_path_changed;
 
 public slots:
     void parallelLoadPage(const ImagePreloadParams &params){
@@ -70,7 +72,7 @@ public slots:
             if(left_exceed == true && right_exceed == true) break;
             if(page_current_changed.fetchAndStoreRelaxed(0) == 1){
                 //need to rerun this function from new params
-                if(new_params.page_num_current != page_num_current || new_params.page_type != page_type){
+                if(new_params.page_num_current != page_num_current || new_params.page_type != page_type || is_path_changed == true){
                     //page_current_changed.store(0);
                     return;
                 }
@@ -88,6 +90,14 @@ public slots:
         page_current_changed.store(1);
 
     }
+	void setPath(const QString path) {
+		
+		is_path_changed = true;
+		page_current_changed.store(1);
+		archive_path = path.toStdString();
+		image_processor.loadArchive(archive_path);
+		is_path_changed = false;
+	}
 };
 
 #endif // PRELOADWORKER_H

@@ -60,6 +60,7 @@ Window {
             anchors.verticalCenter : parent.verticalCenter
             Image {
                 id: showImage
+				objectName:"ShowImage"
                 width: (showImage2.status == Image.Error||showImage2.status == Image.Null || showImage2.opacity == 0.0) ? parent.width : parent.width*0.48
                 anchors.left: parent.left
                 anchors.top: parent.top
@@ -68,8 +69,8 @@ Window {
 
                 property int pageNum: 1
                 property int showMode: 2 //0 for text, 1 for graphic, 2 for raw
-
-                source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString()
+				property int trigger: 0
+                source: "image://ImageProvider/" + pageNum.toString() + "/" + showMode.toString() + "/" + trigger
 
                 cache: false
                 fillMode: Image.PreserveAspectFit
@@ -88,7 +89,7 @@ Window {
                     showWindow.anchors.verticalCenter = showWindow.parent.verticalCenter
                     if(showImage2.isShow == true){
                         if(pageNum == slider.to) pageNum -= 1;
-                        showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+                        showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()+ "/" + showImage2.trigger
                     }
 
                     //console.log(showImage.width)
@@ -97,16 +98,19 @@ Window {
 
                 }
 
+
             }
 
             Image{
                  id: showImage2
+				 objectName: "ShowImage2"
                  property bool isShow: false
+				 property int trigger: 0
                  width: parent.width *0.48
                  anchors.right: parent.right
                  anchors.top: parent.top
                  anchors.bottom: parent.bottom
-                 //source: "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+                 //source: "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()+ "/" + trigger
                  opacity: 0.0
                  cache: false
                  fillMode: Image.PreserveAspectFit
@@ -159,7 +163,7 @@ Window {
                         // switch to show the second image
                         showImage2.opacity = 1.0
                         showImage2.isShow = true
-                        showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+                        showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString() + "/" + showImage2.trigger
                         //console.log(showImage2.status)
                     }
                     else{
@@ -192,7 +196,8 @@ Window {
 				target:showImage
 				onShowModeChanged:{
 					if( showImage2.isShow == true){
-						 showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString()
+						 showImage2.source = "image://ImageProvider/" + (showImage.pageNum + 1).toString() + "/" + showImage.showMode.toString() + "/" + showImage2.trigger
+                        //console.log(showImage2.status)
 					}
 				}
 			}
@@ -250,6 +255,7 @@ Window {
         RowLayout {
             anchors.rightMargin: 0
             anchors.fill: parent
+			/*
             CustomButton {
                 text: qsTr("PopUpMenu")
                 Layout.fillWidth: false
@@ -274,12 +280,12 @@ Window {
                             title: "Please choose a file"
                             folder: shortcuts.home
                             onAccepted: {
-                                console.log("You chose: " + fileDialog.fileUrls)
-                                Qt.quit()
+                                //console.log("You chose: " + fileDialog.fileUrls)
+                                //Qt.quit()
                             }
                             onRejected: {
-                                console.log("Canceled")
-                                Qt.quit()
+                                //console.log("Canceled")
+                                //Qt.quit()
                             }
 
                         }
@@ -292,6 +298,32 @@ Window {
                         text: "Save"
                     }
                 }
+				
+            }*/
+			CustomButton {
+                    text: qsTr(" Open ")
+					Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    FileDialog {
+                        id: fileDialog
+                        objectName: "FileDialog"
+                        title: "Please choose a file"
+                        folder: shortcuts.home
+						nameFilters: [ "cbr files (*.cbr)","cbz files (*.cbz)", "All files (*)" ]
+						selectMultiple: false
+						signal setFilePathSignal(string msg)
+                        onAccepted: {
+                            //console.log("You chose: " + fileDialog.fileUrl)
+                            //Qt.quit()
+							setFilePathSignal(fileDialog.fileUrl)
+							
+                        }
+                        onRejected: {
+                            //console.log("Canceled")
+                            //Qt.quit()
+                        }
+
+                    }
+                    onClicked: fileDialog.open()
             }
             CustomSeparator{}
             Item {

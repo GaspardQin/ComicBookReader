@@ -25,11 +25,15 @@ int main(int argc, char *argv[])
 
     ImgProvider* img_provider_ptr = new ImgProvider;
     engine.addImageProvider(QString("ImageProvider"), img_provider_ptr);
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
 
     if (engine.rootObjects().isEmpty())
         return -1;
     img_provider_ptr->setRootObject(engine.rootObjects().first());
+    QObject* fileDiag_ptr = engine.rootObjects().first()->findChild<QObject*>("FileDialog");
+    QObject::connect(fileDiag_ptr, SIGNAL(setFilePathSignal(QString)),
+		img_provider_ptr, SLOT(filePathSlot(QString)));
     return app.exec();
 }

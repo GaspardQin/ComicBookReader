@@ -13,9 +13,11 @@ ArchiveReader::~ArchiveReader()
 
 bool ArchiveReader::loadArchivedFiles(std::string file_path)
 {
+	offset_cache.clear();
 	archive_path = file_path;
 	char *path = &archive_path[0];
 	stream = ar_open_file(path);
+	if (stream == NULL) return false;
 	ar = ar_open_any_archive(stream, strrchr(path, '.'));
 	if (!ar) return false;
 	int count = 0;

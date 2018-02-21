@@ -36,6 +36,9 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
 - After having finished the UI part, the project is re-managed by Visual Studio, which is much more fast and easy to debug. The new VS project is in the Qt folder.
 - Use original cv::Mat format to cache the images instead of QImage, this can solve the problem of management of memory. (If QImage is cached, the cv::Mat cannot be freed to keep the data of QImage, but when QImage is automatically freed by cache, cv::Mat cannot be freed automatically).
 - Realize the button T/I/R (mode switch)
+- Realize the uncompress part, using unarrlib. (note that, a vector can be directment transfer to a C program that use array, notation: `char *array = &vector[0];`)
+- Almost done.
+
 
 ## TO DO (in priori order)
 - ~~make the picture load asynchronouslly.~~ Done
@@ -47,6 +50,6 @@ finally, there exists a presentation of 5 mins (explication, illustration(run th
 - ~~improve the image process part, including two parts: picture, and test.~~ Done
 - add adjust bar for image process
 - ~~finish the button "Two".~~ Done
-- link the uncompress part.
-- add parallel feature to uncompress part. One thread to read the current page, one thread to read the neighbour pages into buffer
-- finish the button "Open".(actually no need to use the popup view).
+- ~~link the uncompress part.~~ Done
+- ~~add parallel feature to uncompress part. One thread to read the current page, one thread to read the neighbour pages into buffer~~ Done automatically
+- ~~finish the button "Open".(actually no need to use the popup view).~~ Done
