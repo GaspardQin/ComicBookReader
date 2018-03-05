@@ -108,7 +108,7 @@ public:
 	{
 
 		cv::Mat input_image;
-		archive_reader.loadOneImage(num, input_image);
+		if(!archive_reader.loadOneImage(num, input_image)) return false;
 
 		if (image_type_flag == RAW) {
 			cvtColor(input_image, output_image, CV_BGR2RGB);

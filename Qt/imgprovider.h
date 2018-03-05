@@ -75,8 +75,8 @@ public:
             return QImage() ; //fake return
         }
 
-        ImagePreloadParams test_change_params(current_page,0,0,page_type);
-        emit pageChanged(test_change_params);
+        
+        emit pageChanged();
 
 
         //check if already exists
@@ -135,8 +135,8 @@ public:
     void preloadImage(const int page_num){
         ImagePreloadParams params;
         params.page_num_current = page_num;
-        params.page_preload_left_size = 5;
-        params.page_preload_right_size = 10;
+        params.page_preload_left_size = 10;
+        params.page_preload_right_size = 20;
         params.page_type = page_type;
 
         emit preloadSignals(params);
@@ -162,8 +162,9 @@ public:
 		//tell showImage and showImage2 to request new image
 		QObject* show_image_ptr = root_object_ptr->findChild<QObject*>("ShowImage");
 		QObject* show_image2_ptr = root_object_ptr->findChild<QObject*>("ShowImage2");
+		show_image_ptr->setProperty("pageNum", 1);
 		show_image_ptr->setProperty("trigger", !(show_image_ptr->property("trigger").toInt()));
-		if(show_image2_ptr->property("isShow").toBool() == true)
+		if(show_image2_ptr->property("isShow").toBool() == true)	
 			show_image2_ptr->setProperty("trigger", !(show_image2_ptr->property("trigger").toInt()));
 	}
 public slots:
@@ -176,7 +177,7 @@ public slots:
 signals:
     void preloadSignals(const ImagePreloadParams &);
     void setPreloadPageNumTotal(const int &);
-    void pageChanged(const ImagePreloadParams &);
+    void pageChanged();
 	void setPreloadPath(const QString&);
 private:
 	std::string path;

@@ -17,7 +17,7 @@ public:
 		cv_image_ptr = new cv::Mat;
 	}
 	~ImageData(){
-		free(cv_image_ptr);
+		delete cv_image_ptr;
 	}
 };
 

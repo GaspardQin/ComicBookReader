@@ -32,5 +32,6 @@ private:
 	std::vector<unsigned char> read_buffer;
 	std::vector<int> offset_cache;
 	int page_num_total;
+	bool isSingleImg;
 };
 

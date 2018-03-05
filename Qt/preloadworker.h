@@ -12,7 +12,7 @@ class PreLoadWorker : public QObject
     Q_OBJECT
 public:
     PreLoadWorker(){
-         page_current_changed.store(0);
+		 is_page_current_changed = false;
 		 is_path_changed = false;
 		 //archive_path = path;
          //for debug
@@ -45,13 +45,15 @@ private:
 	std::string archive_path;
     ImageProcess image_processor;
     int page_num_total;
-    QAtomicInt page_current_changed;
+    bool is_page_current_changed;
+	bool is_run;
     ImagePreloadParams new_params;
 	bool is_path_changed;
 
 public slots:
     void parallelLoadPage(const ImagePreloadParams &params){
-
+		is_run = true;
+		is_path_changed = false;
         bool left_exceed = false;
         bool right_exceed = false;
         int page_type = params.page_type;
@@ -59,44 +61,46 @@ public slots:
         int page_preload_left_size = params.page_preload_left_size;
         int page_preload_right_size = params.page_preload_right_size;
         for(int i = 1 ; i<= qMax<int>(page_preload_left_size,page_preload_right_size); i++){
-            if(page_num_current - i >= 1 && i <= page_preload_left_size){
-                loadAndCacheImage(page_num_current - i, page_type);
-            }
-            else left_exceed = true;
+
 
             if(page_num_current + i <= page_num_total && i <= page_preload_right_size){
                 loadAndCacheImage(page_num_current + i, page_type);
             }
             else right_exceed = true;
 
+			if (page_num_current - i >= 1 && i <= page_preload_left_size) {
+				loadAndCacheImage(page_num_current - i, page_type);
+			}
+			else left_exceed = true;
+
             if(left_exceed == true && right_exceed == true) break;
-            if(page_current_changed.fetchAndStoreRelaxed(0) == 1){
-                //need to rerun this function from new params
-                if(new_params.page_num_current != page_num_current || new_params.page_type != page_type || is_path_changed == true){
-                    //page_current_changed.store(0);
-                    return;
-                }
+            if(is_page_current_changed == true || is_path_changed == true){
+                //need to rerun this function from new params 
+				is_run = false;
+                return;
+                
             }
         }
 
+		is_run = false;
 
     }
 
     void setPageNumTotal(const int t){
         page_num_total = t;
     }
-    void pageChanged(const ImagePreloadParams &res){
-        new_params = res;
-        page_current_changed.store(1);
-
+    void pageChanged(){
+		if (is_run == true)
+			is_page_current_changed = true;
+		std::cout << "page changed" << std::endl;
     }
 	void setPath(const QString path) {
-		
-		is_path_changed = true;
-		page_current_changed.store(1);
+
+		if (is_run == true)
+			is_path_changed = true;
 		archive_path = path.toStdString();
 		image_processor.loadArchive(archive_path);
-		is_path_changed = false;
+		
 	}
 };
 

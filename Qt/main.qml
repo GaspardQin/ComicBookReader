@@ -308,7 +308,7 @@ Window {
                         objectName: "FileDialog"
                         title: "Please choose a file"
                         folder: shortcuts.home
-						nameFilters: [ "cbr files (*.cbr)","cbz files (*.cbz)", "All files (*)" ]
+						nameFilters: [ "cbr cbz files (*.cbr *.cbz)", "Image files (*.png *.jpg *.bmp)","All files (*)",  ]
 						selectMultiple: false
 						signal setFilePathSignal(string msg)
                         onAccepted: {
