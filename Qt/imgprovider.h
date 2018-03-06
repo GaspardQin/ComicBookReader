@@ -33,19 +33,19 @@ public:
 		preload_thread = std::thread(&PreLoadWorker::parallelLoadPage, &preload_worker);
 
 
-        cache.setMaxCost(100); // set cache's capacity, can save 100 images;
+        cache.setMaxCost(50); // set cache's capacity, can save 100 images;
         //emit setPreloadPageNumTotal(page_num_total);
 
 
     }
     ~ImgProvider(){
 
-		g_is_exit = true;
+        g_is_exit = true;
 		
         //free cache
         cache.clear();
-
-		preload_thread.join();
+        g_preload_cv.notify_one();
+        preload_thread.join();
 
     }
     void setRootObject(QObject* ptr){
@@ -133,8 +133,8 @@ public:
     void preloadImage(const int page_num){
 
 		g_preload_params.page_num_current = page_num;
-		g_preload_params.page_preload_left_size = 10;
-		g_preload_params.page_preload_right_size = 20;
+        g_preload_params.page_preload_left_size = 5;
+        g_preload_params.page_preload_right_size = 5;
 		g_preload_params.page_type = page_type;
 
 		g_preload_cv.notify_one();

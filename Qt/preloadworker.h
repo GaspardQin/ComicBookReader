@@ -52,11 +52,12 @@ public:
 
 
 	void parallelLoadPage() {//using extern preload_params
-		while (!g_is_exit) {
+        while (1) {
 			
 			std::unique_lock <std::mutex> lck(g_preload_mutex);
 			g_preload_cv.wait(lck); //wait for the preload signal
 			
+            if(g_is_exit == true) return;
 			if (g_is_path_changed == true) {
 				image_processor.loadArchive(g_archive_path);
 				g_is_path_changed = false;
@@ -93,6 +94,7 @@ public:
 			}
 			g_is_preload_run = false;
 		}
+        return;
 		
 
 	}
