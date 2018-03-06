@@ -14,7 +14,15 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 
   The GUI part and the other parts are asynchronous. The entire program will not be blocked even the reading or processing is not finished. 
 
-  ​
+- **Multi-platform**
+
+  Thanks to the multi-platform Qt and unarrlib, this program is complete multi-platform. In theoretical, this program can be compiled in Windows, Linux, Unix, Mac, etc.
+
+  Right now, the program is tested in both Windows and Linux.
+
+  This is the screen shot in Linux.
+
+  ![](./report/linux_version.png)
 
 - **Fast**
 
@@ -40,13 +48,13 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 
   - **Using Cache**
 
-    Almost all of the requested images are cached, Using the `Qcache` structure offered by Qt. This cache is protected by a `ReadWriteLock` which is also provided by Qt. This cache only reserves the pointers of the images, and its size is fixed to 100(maximum 100 images). It automatically free the oldest pointer when it is full. 
+    Almost all of the requested images are cached, Using the `Qcache` structure offered by Qt. This cache is protected by a `ReadWriteLock` which is also provided by Qt. This cache only reserves the pointers of the images, and its size is fixed to 50(maximum 50 images). It automatically free the oldest pointer when it is full. 
 
   - **parallel Pre-load **
 
-    The processing part and reading part contain 2 thread. One always work for the current page, which has a high priority. Another one always work for the preload, which has a low priority.
+    The processing part and reading part contain 2 thread. One always work for the current page, another one always work for the preload.
 
-    When user requires a specific page `n` from the GUI, the `ImageProcessing` part receives the signal and starts to working, requests the raw image from `ArchieveReader` , finishes the processing, store it into the cache, and send to the GUI. After that, the preload worker starts to work. It preloads the images from `n-15` to `n+20` page, writes the processed image into cache.
+    When user requires a specific page `n` from the GUI, the `ImageProcessing` part receives the signal and starts to working, requests the raw image from `ArchieveReader` , finishes the processing, store it into the cache, and send to the GUI. After that, the preload worker starts to work. It preloads the images from `n-5` to `n+5` page, writes the processed image into cache.
 
     If user changed the current page when the preload worker is working, the worker will automatically stop and give the resource to main processing thread, which will offer the requested image as quick as it can.
 
@@ -66,7 +74,7 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 
     The picture is transformed to binary image, in order to highlighting the text, which is  useful for showing document.
 
-    ![](./report/TextMode.png)
+    ![](./report/TextMode.PNG)
 
   - **Image mode**
 
