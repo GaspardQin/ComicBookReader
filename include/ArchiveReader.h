@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <opencv2\opencv.hpp>
+#include <opencv2/opencv.hpp>
 extern "C"
 {
 #include "unarr.h"

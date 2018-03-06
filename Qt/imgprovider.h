@@ -5,7 +5,12 @@
 #include "preloadworker.h"
 #include <QCache>
 #include "cache.h"
+#ifdef  _WIN64
 #include "image_process.h"
+#endif
+#ifdef __linux__
+#include "../include/image_process.h"
+#endif
 #include <opencv2/opencv.hpp>
 #include <functional>
 class ImgProvider :  public QObject, public QQuickImageProvider
@@ -160,7 +165,12 @@ public:
 	}
 public slots:
 	void filePathSlot(const QString &p) {
+#ifdef _WIN64
 		QStringList pieces = p.split("///");
+#endif
+#ifdef __linux__
+        QStringList pieces = p.split("//");
+#endif
 		g_archive_path = pieces[1].toStdString();
 		g_is_path_changed = true;
 		handlePathChange();
