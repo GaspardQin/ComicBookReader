@@ -16,7 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #Files for opencv
 INCLUDEPATH += $$PWD\..\3dparts\include\opencv
 LIBS += -L"$$PWD\\..\\3dparts\\lib\\opencv" \
-    -lopencv_world331d
+    -lopencv_world331
 ##########
 #Files for unarr
 INCLUDEPATH += $$PWD\..\3dparts\include\unarr

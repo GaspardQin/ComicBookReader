@@ -1,5 +1,9 @@
 #ifndef CACHE_H
 #define CACHE_H
+
+#include <mutex>
+#include <thread>
+#include <condition_variable>
 #include <QSharedData>
 #include <QCache>
 #include <QImage>

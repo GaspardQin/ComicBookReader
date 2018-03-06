@@ -4,57 +4,49 @@
 #include <iostream>
 #include "preloadworker.h"
 #include <QCache>
-#include <QThread>
 #include "cache.h"
 #include "image_process.h"
 #include <opencv2/opencv.hpp>
-
+#include <functional>
 class ImgProvider :  public QObject, public QQuickImageProvider
 {
     Q_OBJECT
 	
-    QThread preloadThread;
 public:
 
     ImgProvider()
         : QQuickImageProvider(QQuickImageProvider::Image, QQmlImageProviderBase::ForceAsynchronousImageLoading )
     {
+
 		is_path_set = false; //initially no image to show
-		is_path_changed = false; 
-		page_num_total = 1;
-        // for debug
-		//image_processor.loadArchive(debug_path);
-		//page_num_total = image_processor.getPageNumTotal();
+		g_is_path_changed = false; 
+		g_page_num_total = 1;
 
-        //for parallel reloading
 
-        PreLoadWorker *preload_worker = new PreLoadWorker();
-        preload_worker->moveToThread(&preloadThread);
-        connect(&preloadThread,&QThread::finished, preload_worker, &QObject::deleteLater);
-        connect(this, &ImgProvider::preloadSignals, preload_worker, &PreLoadWorker::parallelLoadPage);
-        connect(this, &ImgProvider::setPreloadPageNumTotal, preload_worker, &PreLoadWorker::setPageNumTotal);
-        connect(this, &ImgProvider::pageChanged, preload_worker, &PreLoadWorker::pageChanged);
-		connect(this, &ImgProvider::setPreloadPath, preload_worker, &PreLoadWorker::setPath);
-        preloadThread.start();
-        preloadThread.setPriority(QThread::LowPriority); //set preloading thread's priority to low.
+        //for parallel preloading
+		
+		preload_thread = std::thread(&PreLoadWorker::parallelLoadPage, &preload_worker);
+
+
         cache.setMaxCost(100); // set cache's capacity, can save 100 images;
         //emit setPreloadPageNumTotal(page_num_total);
 
 
     }
     ~ImgProvider(){
-        preloadThread.quit();
-        preloadThread.wait();
 
+		g_is_exit = true;
+		
         //free cache
         cache.clear();
-	
+
+		preload_thread.join();
 
     }
     void setRootObject(QObject* ptr){
         root_object_ptr = ptr;
         QObject* slidbar_ptr = root_object_ptr->findChild<QObject*>("SlideBar");
-        slidbar_ptr->setProperty("to", page_num_total);
+        slidbar_ptr->setProperty("to", g_page_num_total);
     }
 	QImage cvMatToQImage(const cv::Mat *cv_image_ptr) {
 		return QImage((uchar*)cv_image_ptr->data, cv_image_ptr->cols, cv_image_ptr->rows, cv_image_ptr->step, QImage::Format_RGB888);
@@ -76,7 +68,8 @@ public:
         }
 
         
-        emit pageChanged();
+		if (g_is_preload_run == true)
+			g_is_page_current_changed = true;
 
 
         //check if already exists
@@ -133,25 +126,23 @@ public:
         return cvMatToQImage(image_data_ptr->cv_image_ptr);
     }
     void preloadImage(const int page_num){
-        ImagePreloadParams params;
-        params.page_num_current = page_num;
-        params.page_preload_left_size = 10;
-        params.page_preload_right_size = 20;
-        params.page_type = page_type;
 
-        emit preloadSignals(params);
+		g_preload_params.page_num_current = page_num;
+		g_preload_params.page_preload_left_size = 10;
+		g_preload_params.page_preload_right_size = 20;
+		g_preload_params.page_type = page_type;
 
+		g_preload_cv.notify_one();
 
     }
 
 
 
 	void handlePathChange() {
-		image_processor.loadArchive(path);
-		page_num_total = image_processor.getPageNumTotal();
-		emit setPreloadPageNumTotal(page_num_total);
+		image_processor.loadArchive(g_archive_path);
+		g_page_num_total = image_processor.getPageNumTotal();
 		QObject* slidbar_ptr = root_object_ptr->findChild<QObject*>("SlideBar");
-		slidbar_ptr->setProperty("to", page_num_total);
+		slidbar_ptr->setProperty("to", g_page_num_total);
 		cache_lock.lockForWrite();
 		cache.clear();
 		cache_lock.unlock();
@@ -170,26 +161,20 @@ public:
 public slots:
 	void filePathSlot(const QString &p) {
 		QStringList pieces = p.split("///");
-		path = pieces[1].toStdString();
-		emit setPreloadPath(pieces[1]);
+		g_archive_path = pieces[1].toStdString();
+		g_is_path_changed = true;
 		handlePathChange();
 	}
-signals:
-    void preloadSignals(const ImagePreloadParams &);
-    void setPreloadPageNumTotal(const int &);
-    void pageChanged();
-	void setPreloadPath(const QString&);
+
 private:
-	std::string path;
+
     ImageProcess image_processor;
-   // QString path_debug = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/OnePiece/";
-	std::string debug_path = "C:/Users/qw595/Documents/GitHub/ComicBookReader/TestSamples/Injustice2.cbr";
-    int page_num_total = 1; //init value, cannot set 0 because of the calculation in slidebar.
+
     QObject *root_object_ptr;
     int page_type = 0; //by default, page_type set to image type. 0 image type, 1 text image
 	bool is_path_set;
-	bool is_path_changed;
-
+	std::thread preload_thread;
+	PreLoadWorker preload_worker;
 };
 
 #endif // IMGPROVIDER_H

@@ -7,8 +7,15 @@
 
 QCache<int,ImageData> cache;
 QReadWriteLock cache_lock;
-
-
+bool g_is_page_current_changed;
+bool g_is_path_changed;
+bool g_is_preload_run;
+std::mutex g_preload_mutex;
+std::condition_variable g_preload_cv;
+int g_page_num_total;
+std::string g_archive_path;
+ImagePreloadParams g_preload_params;
+bool g_is_exit; //program finished
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WIN)

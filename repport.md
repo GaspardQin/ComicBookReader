@@ -50,19 +50,25 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 
     If user changed the current page when the preload worker is working, the worker will automatically stop and give the resource to main processing thread, which will offer the requested image as quick as it can.
 
+  - **Using `std::thread` instead of `qthread`**
+
+    To manage the parallel pre-load thread, the *std::thread* is used, which is much more complicated than *qthread*, but has a much better performance. (A event between signal and slot of *qthread* can has a latency about 10ms.)
+
 - **Different modes for image processing**
 
   The program supports 3 modes for image processing:
 
-   -  Raw mode
+   -  **Raw mode**
 
       The picture is loaded and directly showed without processing
 
-  - Text mode
+  - **Text mode**
 
     The picture is transformed to binary image, in order to highlighting the text, which is  useful for showing document.
 
-  - Image mode
+    ![](./report/TextMode.png)
+
+  - **Image mode**
 
     The picture is processed by a Gaussian filtered to decrease the noise and by a  Laplace filter to increasing local contrast. This mode is helpful for showing the color photos.
 
@@ -70,13 +76,13 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 
   Two showing mode are support:
 
-  - show one picture once
+  - **show one picture once**
 
     ![](./report/OneImgMode.PNG)
 
     ​
 
-  - show two picture once
+  - **show two picture once**
 
     ![](./report/TwoImgMode.PNG)
 

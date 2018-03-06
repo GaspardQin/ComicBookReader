@@ -1,22 +1,27 @@
 #ifndef PRELOADWORKER_H
 #define PRELOADWORKER_H
 
-#include <QObject>
 #include <QImage>
 #include <cache.h>
-#include <QAtomicInt>
 #include <opencv2/opencv.hpp>
 #include "image_process.h"
-class PreLoadWorker : public QObject
+
+extern bool g_is_page_current_changed;
+extern bool g_is_path_changed;
+extern bool g_is_preload_run;
+extern int g_page_num_total;
+extern std::string g_archive_path;
+extern ImagePreloadParams g_preload_params;
+extern std::mutex g_preload_mutex;
+extern std::condition_variable g_preload_cv;
+extern bool g_is_exit;
+class PreLoadWorker
 {
-    Q_OBJECT
 public:
     PreLoadWorker(){
-		 is_page_current_changed = false;
-		 is_path_changed = false;
-		 //archive_path = path;
-         //for debug
-         //image_processor.loadArchive(path);
+		 g_is_page_current_changed = false;
+		 g_is_preload_run = false;
+		 //parallelLoadPage();
     }
 
     void loadAndCacheImage(const int page_num, const int page_type){
@@ -41,67 +46,59 @@ public:
         cache_lock.unlock();
     }
 
-private:
-	std::string archive_path;
-    ImageProcess image_processor;
-    int page_num_total;
-    bool is_page_current_changed;
-	bool is_run;
-    ImagePreloadParams new_params;
-	bool is_path_changed;
 
-public slots:
-    void parallelLoadPage(const ImagePreloadParams &params){
-		is_run = true;
-		is_path_changed = false;
-        bool left_exceed = false;
-        bool right_exceed = false;
-        int page_type = params.page_type;
-        int page_num_current = params.page_num_current;
-        int page_preload_left_size = params.page_preload_left_size;
-        int page_preload_right_size = params.page_preload_right_size;
-        for(int i = 1 ; i<= qMax<int>(page_preload_left_size,page_preload_right_size); i++){
-
-
-            if(page_num_current + i <= page_num_total && i <= page_preload_right_size){
-                loadAndCacheImage(page_num_current + i, page_type);
-            }
-            else right_exceed = true;
-
-			if (page_num_current - i >= 1 && i <= page_preload_left_size) {
-				loadAndCacheImage(page_num_current - i, page_type);
+	void parallelLoadPage() {//using extern preload_params
+		while (!g_is_exit) {
+			
+			std::unique_lock <std::mutex> lck(g_preload_mutex);
+			g_preload_cv.wait(lck); //wait for the preload signal
+			
+			if (g_is_path_changed == true) {
+				image_processor.loadArchive(g_archive_path);
+				g_is_path_changed = false;
 			}
-			else left_exceed = true;
 
-            if(left_exceed == true && right_exceed == true) break;
-            if(is_page_current_changed == true || is_path_changed == true){
-                //need to rerun this function from new params 
-				is_run = false;
-                return;
-                
-            }
-        }
+			g_is_preload_run = true;
+			
+			bool left_exceed = false;
+			bool right_exceed = false;
+			int page_type = g_preload_params.page_type;
+			int page_num_current = g_preload_params.page_num_current;
+			int page_preload_left_size = g_preload_params.page_preload_left_size;
+			int page_preload_right_size = g_preload_params.page_preload_right_size;
+			for (int i = 1; i <= qMax<int>(page_preload_left_size, page_preload_right_size); i++) {
 
-		is_run = false;
 
-    }
+				if (page_num_current + i <= g_page_num_total && i <= page_preload_right_size) {
+					loadAndCacheImage(page_num_current + i, page_type);
+				}
+				else right_exceed = true;
 
-    void setPageNumTotal(const int t){
-        page_num_total = t;
-    }
-    void pageChanged(){
-		if (is_run == true)
-			is_page_current_changed = true;
-		std::cout << "page changed" << std::endl;
-    }
-	void setPath(const QString path) {
+				if (page_num_current - i >= 1 && i <= page_preload_left_size) {
+					loadAndCacheImage(page_num_current - i, page_type);
+				}
+				else left_exceed = true;
 
-		if (is_run == true)
-			is_path_changed = true;
-		archive_path = path.toStdString();
-		image_processor.loadArchive(archive_path);
+				if (left_exceed == true && right_exceed == true) break;
+				if (g_is_page_current_changed == true || g_is_path_changed == true) {
+					//need to rerun this function from new params 
+					if(g_is_page_current_changed == true) g_is_page_current_changed = false;
+					break;
+
+				}
+			}
+			g_is_preload_run = false;
+		}
 		
+
 	}
+
+
+
+private:
+	ImageProcess image_processor;
+	
+    
 };
 
 #endif // PRELOADWORKER_H

@@ -6,8 +6,7 @@ class ImageProcess:public ImageProcessInterface {
 #define GRAPHIC 1
 #define RAW 2
 public:
-	ImageProcess(){
-		
+	ImageProcess(){ 
 		is_loaded = false;
 	}
 	bool autoAdjustImage(cv::Mat& input_image, cv::Mat& output_image, int image_type_flag) {
@@ -93,12 +92,9 @@ public:
 		//Do not process
 		return true;
 	}
-
-
-
 	bool loadArchive(std::string path) {
-		archive_path = path;
-		if(!archive_reader.loadArchivedFiles(archive_path)) return false;
+		if(!archive_reader.loadArchivedFiles(path)) 
+			return false;
 		page_num_total = archive_reader.getPageNumTotal();
 		is_loaded = true;
 		return true;
@@ -125,7 +121,6 @@ public:
 		else return 1;
 	}
 private:
-	std::string archive_path;//Need to be deleted!!!!!!!!!!!!
 	ArchiveReader archive_reader;
 	int page_num_total;
 	bool is_loaded;

@@ -49,12 +49,6 @@
     <ClCompile Include="showimage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\moc_preloadworker.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_preloadworker.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="Debug\moc_imgprovider.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
