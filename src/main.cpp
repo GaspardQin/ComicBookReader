@@ -1,8 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 //#include "showimage.h"
-#include "imgprovider.h"
-#include "cache.h"
+#include "../include/imgprovider.h"
+#include "../include/cache.h"
 
 
 QCache<int,ImageData> cache;

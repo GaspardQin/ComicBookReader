@@ -1,4 +1,4 @@
-#include "preloadworker.h"
+#include "../include/preloadworker.h"
 
 
 PreLoadWorker::PreLoadWorker(){

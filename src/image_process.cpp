@@ -1,4 +1,4 @@
-#include "image_process.h"
+#include "../include/image_process.h"
 bool ImageProcess::autoAdjustImage(cv::Mat &input_image, cv::Mat &output_image, int image_type_flag) {
     // image_type_flags = 0 for image whose the type is text
     // image_type_flags = 1 for image whose the type is graphics

@@ -1,4 +1,4 @@
-#include "imgprovider.h"
+#include "../include/imgprovider.h"
 
 ImgProvider::ImgProvider()
     : QQuickImageProvider(QQuickImageProvider::Image, QQmlImageProviderBase::ForceAsynchronousImageLoading )

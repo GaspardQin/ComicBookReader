@@ -2,7 +2,7 @@
 #define PRELOADWORKER_H
 
 #include <QImage>
-#include <cache.h>
+#include "cache.h"
 #include <opencv2/opencv.hpp>
 #ifdef  _WIN64
 #include "image_process.h"
