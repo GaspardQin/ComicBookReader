@@ -192,10 +192,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ArchiveReader.cpp" />
+    <ClCompile Include="..\src\image_process.cpp" />
     <ClCompile Include="..\src\imgprovider.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\preloadworker.cpp" />
-    <ClCompile Include="..\src\showimage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\ArchiveReader.h" />
@@ -205,8 +205,6 @@
     <QtMoc Include="..\include\imgprovider.h">
     </QtMoc>
     <ClInclude Include="..\include\preloadworker.h" />
-    <QtMoc Include="..\include\showimage.h">
-    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">

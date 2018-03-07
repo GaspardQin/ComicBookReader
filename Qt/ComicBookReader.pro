@@ -17,7 +17,8 @@ win32 {
     ##########
     #Files for opencv
     INCLUDEPATH += $$PWD/../3dparts/include/opencv
-    LIBS += -L$$PWD/../3dparts/lib/opencv -lopencv_world331
+    LIBS += -L$$PWD/../3dparts/lib/opencv -lopencv_core331 -lopencv_imgcodecs331 -lopencv_imgproc331
+
     ##########
     #Files for unarr
     INCLUDEPATH += $$PWD\..\3dparts\include\unarr
@@ -58,11 +59,11 @@ INCLUDEPATH += ..\src\
 
 
 SOURCES += \
-    ../src/showimage.cpp \
     ../src/imgprovider.cpp \
     ../src/preloadworker.cpp\
     ../src/ArchiveReader.cpp \
-    ../src/main.cpp
+    ../src/main.cpp \
+    ../src/image_process.cpp
 
 
 RESOURCES += ../src/qml.qrc
@@ -79,7 +80,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    ../include/showimage.h \
     ../include/imgprovider.h \
     ../include/preloadworker.h \
     ../include/cache.h \

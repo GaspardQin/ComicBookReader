@@ -2,23 +2,46 @@
 
 ### Introduction
 
-ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses the qml technology of Qt to create the GUI,  *OpenCV*  library to process the images, and the *unarrlib* to extract specific files from cbr/cbz file to memory. 
+ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses the qml technology of Qt to create the GUI,  *OpenCV*  library to process the images, and the *unarrlib* to extract specific files from cbr/cbz file to memory.
 
+### Dependencies
+- unarrlib
+  This library is used for file extraction. It is offered by [sumatrapdfreader](https://github.com/sumatrapdfreader) team. More information can be found [here](https://github.com/sumatrapdfreader/sumatrapdf/tree/master/ext/unarr)
+
+- OpenCV
+  This library is used for image processing. The `opencv_core331.lib`, `opencv_imgcodecs331.lib`, and `opencv_imgproc331.lib` modules are used.
+
+- Qt5.10
+  This program uses the QML and QtQuick of Qt5.10 for GUI design.
+
+- C++11
+  `std::thread` is used for multi-thread processing.
+
+### How to build
+- For Windows x64
+  - Use Qt creator or VisualStudio2017(with qt tools plug-in).
+  - MSVC x64 version of Qt5.10 should be installed.
+  - Build unarrlib with VisualStudio2017, copy the `unarrlib.lib` to `3dparts\lib\unarrlib`, and copy the `unarr.h` to `3dparts\lib\unarrlib`.
+  - Build OpenCV3.3.1 with VisualStudio2017, copy the headers (`opencv\` and `opencv2\`) to `3dparts\include\opencv`, and copy `opencv_core331.lib`, `opencv_imgcodecs331.lib`, `opencv_imgproc331.lib` to `3dparts\lib\opencv`.
+    (Or simply using the OpenCV pre-compiled version(`opencv_world331.lib`), but need to change the configuration of VisualStudio2017(`VS2017\release_config.props`) or QtCreator(`Qt\ComicBookReader.pro`))
+  - Build the Project with Qt creator or VisualStudio2017(with qt tools plug-in).
+
+  
 ### UML
 
-
+![](./report/UML.png)
 
 ### Features
 
 - **Asynchronous**
 
-  The GUI part and the other parts are asynchronous. The entire program will not be blocked even the reading or processing is not finished. 
+  The GUI part and the other parts are asynchronous. The entire program will not be blocked even the reading or processing is not finished.
 
 - **Multi-platform**
 
   Thanks to the multi-platform Qt and unarrlib, this program is complete multi-platform. In theoretical, this program can be compiled in Windows, Linux, Unix, Mac, etc.
 
-  Right now, the program is tested in both Windows and Linux.
+  Right now, the program is tested in both **Windows** and **Linux**. (x64)
 
   This is the screen shot in Linux.
 
@@ -47,7 +70,7 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 
     - **Using Cache**
 
-      Almost all of the requested images are cached, Using the `Qcache` structure offered by Qt. This cache is protected by a `ReadWriteLock` which is also provided by Qt. This cache only reserves the pointers of the images, and its size is fixed to 50(maximum 50 images). It automatically free the oldest pointer when it is full. 
+      Almost all of the requested images are cached, Using the `Qcache` structure offered by Qt. This cache is protected by a `ReadWriteLock` which is also provided by Qt. This cache only reserves the pointers of the images, and its size is fixed to 50(maximum 50 images). It automatically free the oldest pointer when it is full.
 
     - **parallel Pre-load **
 
@@ -100,5 +123,5 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 - **Free drag and zoom support**
 
   - The pictures can be dragged freely in the program.
-  - By using `ctrl + scrollWheel`, the pictures can be zoomed freely. The zoom center is always located in the point of mouse. 
+  - By using `ctrl + scrollWheel`, the pictures can be zoomed freely. The zoom center is always located in the point of mouse.
   - Pressing the `AutoFit` button can reset the size and position of pictures to default.

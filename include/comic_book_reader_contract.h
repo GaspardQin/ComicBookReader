@@ -40,10 +40,6 @@ public:
 	// output_image's height in pixels
 	// output_image's width in pixels
 
-	bool virtual quickPreview(cv::Mat& input_image, cv::Mat& output_image) = 0;
-	// used for quickly flipping of pages
-	// show the image with low resolution quickly
-	// need to be resized
 
 	bool virtual getImage(int num, int image_type_flag, cv::Mat& output_image) = 0;
 	//first step: check if the page exists in cache, if not, processing the images

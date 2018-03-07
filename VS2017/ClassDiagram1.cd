@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ArchiveReader">
+    <Position X="3" Y="2.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAAAREAAAQCAAAICAAAAAAAAgAAAAgAACQAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\ArchiveReader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageData">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAABAAAAAAAAAIAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\cache.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImagePreloadParams">
+    <Position X="13.5" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAABAAAAAAACAAAAAAAAAAAAAQAAQAAAAAA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\cache.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArchiveInterface">
+    <Position X="3" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\comic_book_reader_contract.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageProcessInterface">
+    <Position X="6.75" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\comic_book_reader_contract.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageProcess">
+    <Position X="6.75" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABDAAAAAQAAAAACABAAAAAAAIAAAAAAAAABBAgAAAA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\image_process.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="archive_reader" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ImgProvider">
+    <Position X="14.25" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>gAQAAAAAgAQFABgAAAAAAAAACCAAAgAAAAAAAAAABAA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\imgprovider.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="image_processor" />
+      <Field Name="preload_worker" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PreLoadWorker">
+    <Position X="10.75" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAQgAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>C:\Users\qw595\Documents\GitHub\ComicBookReader\include\preloadworker.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="image_processor" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="QObject" Collapsed="true">
+    <Position X="17.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAACAAAAAAAgAIQAIIAAEAAIAIAAAQ=</HashCode>
+      <FileName>d:\Qt\5.10.0\msvc2017_64\include\QtCore\qobject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QQuickImageProvider" Collapsed="true">
+    <Position X="17.25" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAgAAABAAAAAAAAAAAAEAAAAAEAAAAAAAABCQ=</HashCode>
+      <FileName>d:\Qt\5.10.0\msvc2017_64\include\QtQuick\qquickimageprovider.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>
