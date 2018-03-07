@@ -15,7 +15,7 @@ bool ArchiveReader::loadArchivedFiles(std::string file_path)
 {
 	offset_cache.clear();
 	archive_path = file_path;
-	int file_type_pos = archive_path.rfind(".");
+	size_t file_type_pos = archive_path.rfind(".");
 	std::string file_type(archive_path.begin() + file_type_pos + 1, archive_path.end());
 	std::transform(file_type.begin(), file_type.end(), file_type.begin(), ::tolower);
 	if (file_type == "png" || file_type == "jpg" || file_type == "bmp") {
@@ -34,7 +34,7 @@ bool ArchiveReader::loadArchivedFiles(std::string file_path)
 	if (!ar) return false;
 	int count = 0;
 	while (ar_parse_entry(ar)) {
-		int offset = ar_entry_get_offset(ar);
+		size_t offset = ar_entry_get_offset(ar);
 		offset_cache.push_back(offset);
 		count++;
 	}
@@ -52,7 +52,7 @@ bool ArchiveReader::loadOneImage(int num, cv::Mat & a_image)
 
 
 	if(!ar_parse_entry_at(ar, offset_cache[num-1])) return false;
-	int size = ar_entry_get_size(ar);
+	size_t size = ar_entry_get_size(ar);
 	if (size <= 0) {
 		const char* zero_file = ar_entry_get_name(ar);
 		std::cout << zero_file << std::endl;

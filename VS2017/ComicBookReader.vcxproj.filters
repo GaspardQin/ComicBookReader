@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Generated Files">
@@ -35,41 +35,39 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Distribution Files">
+      <UniqueIdentifier>{B83CAF91-C7BF-462F-B76C-EA11631F866C}</UniqueIdentifier>
+      <Extensions>*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Distribution Files">
+      <UniqueIdentifier>{B83CAF91-C7BF-462F-B76C-EA11631F866C}</UniqueIdentifier>
+      <Extensions>*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="imgprovider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="preloadworker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="showimage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_imgprovider.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_imgprovider.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_showimage.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_showimage.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_qml.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ArchiveReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\imgprovider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\preloadworker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\showimage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cache.h">
+    <ClInclude Include="..\include\ArchiveReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\comic_book_reader_contract.h">
@@ -78,18 +76,15 @@
     <ClInclude Include="..\include\image_process.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <CustomBuild Include="imgprovider.h">
+    <QtMoc Include="..\include\imgprovider.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="preloadworker.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="showimage.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <ClInclude Include="..\include\ArchiveReader.h">
+    </QtMoc>
+    <ClInclude Include="..\include\preloadworker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <QtMoc Include="..\include\showimage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -100,26 +95,59 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CustomButton.qml">
+    <None Include="..\src\CustomButton.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="CustomSeparator.qml">
+    <None Include="..\src\CustomSeparator.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="CustomSeparatorHorizontal.qml">
+    <None Include="..\src\CustomSeparatorHorizontal.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="CustomSlider.qml">
+    <None Include="..\src\CustomSlider.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="CustomSliderVertical.qml">
+    <None Include="..\src\CustomSliderVertical.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="main.qml">
+    <None Include="..\src\main.qml">
       <Filter>Resource Files</Filter>
     </None>
-    <CustomBuild Include="qml.qrc">
+    <QtRcc Include="..\src\qml.qrc">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
+    </QtRcc>
+    <None Include="..\src\CustomButton.qml" />
+    <None Include="..\src\CustomSeparator.qml" />
+    <None Include="..\src\CustomSeparatorHorizontal.qml" />
+    <None Include="..\src\CustomSlider.qml" />
+    <None Include="..\src\CustomSliderVertical.qml" />
+    <None Include="..\src\main.qml" />
+    <None Include="..\src\CustomButton.qml" />
+    <None Include="..\src\CustomSeparator.qml" />
+    <None Include="..\src\CustomSeparatorHorizontal.qml" />
+    <None Include="..\src\CustomSlider.qml" />
+    <None Include="..\src\CustomSliderVertical.qml" />
+    <None Include="..\src\main.qml" />
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\CustomButton.qml">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="..\src\CustomSeparator.qml">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="..\src\CustomSeparatorHorizontal.qml">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="..\src\CustomSlider.qml">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="..\src\CustomSliderVertical.qml">
+      <Filter>Distribution Files</Filter>
+    </None>
+    <None Include="..\src\main.qml">
+      <Filter>Distribution Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

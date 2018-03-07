@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComicBookReader", "ComicBookReader.vcxproj", "{595362AF-BE5E-3863-A687-7DBD549D2AA5}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Release|x64 = Release|x64
@@ -23,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7D6CBEE3-4ED9-472D-BF96-5B9E1B76D410}
+		SolutionGuid = {E0103E75-C4EC-4B09-98DE-33C67DAC4ECE}
 	EndGlobalSection
 EndGlobal

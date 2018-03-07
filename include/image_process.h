@@ -2,9 +2,9 @@
 #include "comic_book_reader_contract.h"
 #include "ArchiveReader.h"
 class ImageProcess:public ImageProcessInterface {
-#define TEXT 0
-#define GRAPHIC 1
-#define RAW 2
+//#define TEXT 0
+//#define GRAPHIC 1
+//#define RAW 2
 public:
 	ImageProcess(){ 
 		is_loaded = false;
@@ -106,7 +106,7 @@ public:
 		cv::Mat input_image;
 		if(!archive_reader.loadOneImage(num, input_image)) return false;
 
-		if (image_type_flag == RAW) {
+		if (image_type_flag == 2) { //RAW
 			cvtColor(input_image, output_image, CV_BGR2RGB);
 			return true;
 		}

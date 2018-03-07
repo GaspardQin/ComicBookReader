@@ -36,31 +36,34 @@ ComicBookReader is a c++ program to read .cbr or .cbz comic book files. It uses 
 
     In our program, it will scan and store the *entry* for every files of the *.zip* or *.rar* in the initialization. Then using these *entry*, it can directly access to the files requested, and read it into the memory.
 
+    - **Avoiding massive IO operation.**
 
-  - **Avoiding massive IO operation.**
+      - Using *unarrlib* to read only the images needed to a buffer.
+      - Using OpenCV to read the images directly from the buffer (using function `cv::imdecode()`)
 
-    - Using *unarrlib* to read only the images needed to a buffer.
-    - Using OpenCV to read the images directly from the buffer (using function `cv::imdecode()`)
+    - **Avoiding massive copy operation.**
 
-  - **Avoiding massive copy operation.**
+      Using the pointer to transform the OpenCV's `mat` type to QT's `qimage` type. Only  a new header of `qimage` is needed to create, the main data of `mat` is used directly by `qimage`, avoiding the massive data copy operation.
 
-    Using the pointer to transform the OpenCV's `mat` type to QT's `qimage` type. Only  a new header of `qimage` is needed to create, the main data of `mat` is used directly by `qimage`, avoiding the massive data copy operation.
+    - **Using Cache**
 
-  - **Using Cache**
+      Almost all of the requested images are cached, Using the `Qcache` structure offered by Qt. This cache is protected by a `ReadWriteLock` which is also provided by Qt. This cache only reserves the pointers of the images, and its size is fixed to 50(maximum 50 images). It automatically free the oldest pointer when it is full. 
 
-    Almost all of the requested images are cached, Using the `Qcache` structure offered by Qt. This cache is protected by a `ReadWriteLock` which is also provided by Qt. This cache only reserves the pointers of the images, and its size is fixed to 50(maximum 50 images). It automatically free the oldest pointer when it is full. 
+    - **parallel Pre-load **
 
-  - **parallel Pre-load **
+      The processing part and reading part contain 2 thread. One always work for the current page, another one always work for the preload.
 
-    The processing part and reading part contain 2 thread. One always work for the current page, another one always work for the preload.
+      When user requires a specific page `n` from the GUI, the `ImageProcessing` part receives the signal and starts to working, requests the raw image from `ArchieveReader` , finishes the processing, store it into the cache, and send to the GUI. After that, the preload worker starts to work. It preloads the images from `n-5` to `n+5` page, writes the processed image into cache.
 
-    When user requires a specific page `n` from the GUI, the `ImageProcessing` part receives the signal and starts to working, requests the raw image from `ArchieveReader` , finishes the processing, store it into the cache, and send to the GUI. After that, the preload worker starts to work. It preloads the images from `n-5` to `n+5` page, writes the processed image into cache.
+      If user changed the current page when the preload worker is working, the worker will automatically stop and give the resource to main processing thread, which will offer the requested image as quick as it can.
 
-    If user changed the current page when the preload worker is working, the worker will automatically stop and give the resource to main processing thread, which will offer the requested image as quick as it can.
+    - **Using `std::thread` instead of `qthread`**
 
-  - **Using `std::thread` instead of `qthread`**
+      To manage the parallel pre-load thread, the *std::thread* is used, which is much more complicated than *qthread*, but has a much better performance. (A event between signal and slot of *qthread* can has a latency about 10ms.)
 
-    To manage the parallel pre-load thread, the *std::thread* is used, which is much more complicated than *qthread*, but has a much better performance. (A event between signal and slot of *qthread* can has a latency about 10ms.)
+  - **Using -O3 compile option**
+
+    The program and nearly all of the libraries are compiled in -O3 (or -Ox for MSVC)option, which means the full optimization.
 
 - **Different modes for image processing**
 

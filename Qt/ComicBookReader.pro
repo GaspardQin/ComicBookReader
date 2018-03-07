@@ -11,12 +11,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-win64 {
+#INCLUDEPATH += $$PWD/../3dparts/include/opencv
+
+win32 {
     ##########
     #Files for opencv
-    INCLUDEPATH += $$PWD\..\3dparts\include\opencv
-    LIBS += -L"$$PWD\\..\\3dparts\\lib\\opencv" \
-        -lopencv_world331
+    INCLUDEPATH += $$PWD/../3dparts/include/opencv
+    LIBS += -L$$PWD/../3dparts/lib/opencv -lopencv_world331
     ##########
     #Files for unarr
     INCLUDEPATH += $$PWD\..\3dparts\include\unarr
@@ -28,7 +29,13 @@ win64 {
     INCLUDEPATH += $$PWD\..\3dparts\include\zlib
     LIBS += -L"$$PWD\\..\\3dparts\\lib\\zlib" \
         -lzlib
+
+    QMAKE_CXXFLAGS_RELEASE -= -O
+    QMAKE_CXXFLAGS_RELEASE -= -O1
+    QMAKE_CXXFLAGS_RELEASE -= -O2
+    QMAKE_CXXFLAGS_RELEASE *= -Ox
 }
+
 unix {
     ##########
     #Files for opencv
@@ -37,6 +44,11 @@ unix {
     #Files for unarr
     INCLUDEPATH += $$PWD/../3dparts/include/unarr
     LIBS += -L$$PWD/../3dparts/lib/unarrlib -lunarr
+
+    QMAKE_CXXFLAGS_RELEASE -= -O
+    QMAKE_CXXFLAGS_RELEASE -= -O1
+    QMAKE_CXXFLAGS_RELEASE -= -O2
+    QMAKE_CXXFLAGS_RELEASE *= -O3
 }
 ##########
 #Files for ComicBookReader
@@ -45,13 +57,15 @@ INCLUDEPATH += ..\src\
 ##########
 
 
-SOURCES += main.cpp \
-    showimage.cpp \
-    imgprovider.cpp \
-    preloadworker.cpp\
-    ../src/ArchiveReader.cpp
+SOURCES += \
+    ../src/showimage.cpp \
+    ../src/imgprovider.cpp \
+    ../src/preloadworker.cpp\
+    ../src/ArchiveReader.cpp \
+    ../src/main.cpp
 
-RESOURCES += qml.qrc
+
+RESOURCES += ../src/qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -65,12 +79,19 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    showimage.h \
-    imgprovider.h \
-    preloadworker.h \
-    cache.h \
+    ../include/showimage.h \
+    ../include/imgprovider.h \
+    ../include/preloadworker.h \
+    ../include/cache.h \
     ../include/comic_book_reader_contract.h \
     ../include/image_process.h \
-    ../include/ArchiveReader.h
+    ../include/ArchiveReader.h \
 
-DISTFILES +=
+
+DISTFILES += \
+    ../src/CustomButton.qml \
+    ../src/CustomSeparator.qml \
+    ../src/CustomSeparatorHorizontal.qml \
+    ../src/CustomSlider.qml \
+    ../src/CustomSliderVertical.qml \
+    ../src/main.qml

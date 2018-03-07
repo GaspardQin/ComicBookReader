@@ -30,7 +30,7 @@ private:
 	ar_archive *ar = NULL;
 
 	std::vector<unsigned char> read_buffer;
-	std::vector<int> offset_cache;
+	std::vector<size_t> offset_cache;
 	int page_num_total;
 	bool isSingleImg;
 };
